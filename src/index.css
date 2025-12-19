@@ -1,0 +1,441 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Remove WordPress/theme margins on portal root for mobile */
+@media (max-width: 767px) {
+  #lrh-portal-root,
+  #frs-partnership-portal-root {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Custom CSS variables for branding */
+:root {
+  /* Primary Brand Colors */
+  --brand-dark-navy: #171A1F;
+  --brand-medium-navy: #263042;
+  --brand-slate: #444B57;
+  --brand-steel-blue: #405C7A;
+  --brand-electric-blue: #2563EB;
+  --brand-cyan: #2DD4DA;
+  --brand-light-blue: #7DB3E8;
+  --brand-powder-blue: #B6C7D9;
+  --brand-pale-blue: #C3D9F1;
+  --brand-light-gray: #DADEE3;
+  --brand-off-white: #F8F7F9;
+  --brand-page-background: #FAFAFA;
+  --brand-pure-white: #FFFFFF;
+  
+  /* Form and input specific */
+  --brand-input-background: #FFFFFF;
+
+  /* BrandShowcase specific colors */
+  --brand-navy: #263042;
+  --brand-primary-blue: #2563eb;
+  --brand-rich-teal: #2dd4da;
+  --brand-light-blue: #c3d9f1;
+
+  /* Brand Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-primary-blue) 25%, var(--brand-rich-teal) 75%, var(--brand-light-blue) 100%);
+  --gradient-hero: linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%);
+  --gradient-subtle: linear-gradient(180deg, var(--brand-off-white) 0%, var(--brand-light-blue) 100%);
+  --gradient-button-hover: linear-gradient(45deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 50%, var(--brand-primary-blue) 100%);
+  --gradient-brand-blue: linear-gradient(45deg, var(--brand-primary-blue) 0%, var(--brand-light-blue) 50%, var(--brand-primary-blue) 100%);
+  --gradient-brand-teal: linear-gradient(45deg, var(--brand-rich-teal) 0%, var(--brand-light-blue) 50%, var(--brand-rich-teal) 100%);
+  --gradient-brand-navy: linear-gradient(45deg, var(--brand-navy) 0%, var(--brand-primary-blue) 50%, var(--brand-navy) 100%);
+  --gradient-brand-accent: linear-gradient(45deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 25%, var(--brand-light-blue) 50%, var(--brand-rich-teal) 75%, var(--brand-primary-blue) 100%);
+
+  /* Component defaults */
+  --background: 0 0% 100%;
+  --foreground: 224 12% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 224 12% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 224 12% 11%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 214 50% 83%;
+  --secondary-foreground: 224 12% 11%;
+  --muted: 270 22% 97%;
+  --muted-foreground: 225 6% 33%;
+  --accent: 214 50% 83%;
+  --accent-foreground: 224 12% 11%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 217 91% 60%;
+  --radius: 0.5rem;
+
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 217 91% 60%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 214 50% 83%;
+  --sidebar-accent-foreground: 224 12% 11%;
+  --sidebar-border: 209 38% 81%;
+  --sidebar-ring: 217 91% 60%;
+}
+
+/* WordPress theme override - ensure our buttons have correct colors */
+#frs-partnership-portal-root .bg-primary,
+#frs-partnership-portal-root button.bg-primary {
+  background-color: var(--brand-electric-blue) !important;
+  color: white !important;
+}
+
+#frs-partnership-portal-root .text-primary-foreground {
+  color: white !important;
+}
+
+/* Base styles */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: white;
+    color: var(--foreground);
+  }
+  :root {
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+/* Force card backgrounds to use our custom color and add depth */
+.rounded-lg.border.border-border.bg-card {
+  background-color: white !important;
+  border: 1px solid hsl(214 32% 91%) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ProfileHeader card - larger shadow */
+#frs-portal-v3-root > div > div:first-child {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Header container query setup */
+header {
+  container-type: inline-size;
+  container-name: header;
+}
+
+/* Mobile-first responsive rules using container queries */
+.frs-portal-title {
+  display: none;
+}
+
+/* User role is always visible */
+.frs-user-role {
+  display: block;
+}
+
+/* Show portal title when header container is wide enough */
+@container header (min-width: 640px) {
+  .frs-portal-title {
+    display: block;
+  }
+}
+
+/* Custom animations for tabs */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.animate-fadeOut {
+  animation: fadeOut 0.3s ease-in-out forwards;
+}
+
+/* Component-specific styles */
+.frs-portal-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background-color: white;
+  min-height: 100vh;
+}
+
+/* Tab navigation styling - remove default margins and ensure equal spacing */
+[data-radix-tabs-list] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ensure tab triggers have consistent spacing */
+[data-radix-tabs-trigger] {
+  margin: 0 !important;
+}
+
+/* Tab container spacing */
+.tab-navigation-container {
+  padding-top: 17px !important; /* 12px + 5px for mobile */
+  padding-bottom: 12px !important;
+}
+
+/* Reduce padding on larger screens */
+@media screen and (min-width: 640px) {
+  .tab-navigation-container {
+    padding-top: 12px !important; /* Original padding for desktop */
+  }
+}
+
+/* Portal uses natural document flow - no fixed positioning */
+body.frs-portal-page {
+  padding-top: 0 !important;
+}
+
+/* Portal root container flows naturally with page content */
+#frs-partnership-portal-root {
+  width: 100%;
+  min-height: 100vh;
+  margin-top: 0 !important;
+}
+
+/* Override WordPress theme negative margins on content wrappers */
+body.frs-portal-page .entry-content,
+body.frs-portal-page .page-content,
+body.frs-portal-page article,
+body.frs-portal-page .site-content,
+body.frs-portal-page main {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Portal V3 Fullscreen Styles */
+#frs-portal-v3-root {
+  width: 100vw !important;
+  height: 100vh !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 999999 !important;
+  background: white !important;
+  overflow: hidden !important;
+}
+
+/* Ensure Radix UI Portals (dropdowns, popovers, tooltips) render on top */
+[data-radix-popper-content-wrapper],
+[data-radix-portal] {
+  z-index: 9999999 !important;
+}
+
+/* Ensure dropdown menus are visible and on top */
+[role="menu"],
+[data-radix-dropdown-menu-content] {
+  z-index: 9999999 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Force sidebar to be visible */
+#frs-portal-v3-root [data-sidebar="sidebar"] {
+  display: flex !important;
+}
+
+#frs-portal-v3-root .group.peer {
+  display: block !important;
+}
+
+#frs-portal-v3-root .fixed.inset-y-0 {
+  display: flex !important;
+}
+
+/* Remove list bullets from sidebar */
+#frs-portal-v3-root [data-sidebar="sidebar"] ul {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
+}
+
+/* Mobile sidebar white background */
+[data-sidebar="sidebar"][data-mobile="true"],
+[data-slot="sheet-content"][data-sidebar="sidebar"],
+#frs-mobile-sidebar {
+  background: white !important;
+  background-color: white !important;
+}
+
+/* Fix sidebar overflow - ensure NavUser is always visible at bottom */
+#frs-portal-v3-root [data-sidebar="sidebar"] {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+#frs-portal-v3-root [data-sidebar="content"] {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  min-height: 0 !important;
+}
+
+#frs-portal-v3-root [data-sidebar="footer"] {
+  flex-shrink: 0 !important;
+  margin-top: auto !important;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ============================================
+   LOAN OFFICER PORTAL V2.6 STYLES
+   ============================================ */
+
+/* Brand Colors */
+:root {
+  --brand-navy: #263042;
+  --brand-primary-blue: #2563eb;
+  --brand-rich-teal: #2dd4da;
+  --brand-light-blue: #c3d9f1;
+  --brand-off-white: #f8f7f9;
+}
+
+/* Brand Gradients */
+:root {
+  --gradient-primary: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-primary-blue) 25%, var(--brand-rich-teal) 75%, var(--brand-light-blue) 100%);
+  --gradient-hero: linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%);
+  --gradient-subtle: linear-gradient(180deg, var(--brand-off-white) 0%, var(--brand-light-blue) 100%);
+  --gradient-button-hover: linear-gradient(45deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 50%, var(--brand-primary-blue) 100%);
+  --gradient-brand-blue: linear-gradient(45deg, var(--brand-primary-blue) 0%, var(--brand-light-blue) 50%, var(--brand-primary-blue) 100%);
+  --gradient-brand-teal: linear-gradient(45deg, var(--brand-rich-teal) 0%, var(--brand-light-blue) 50%, var(--brand-rich-teal) 100%);
+  --gradient-brand-navy: linear-gradient(45deg, var(--brand-navy) 0%, var(--brand-primary-blue) 50%, var(--brand-navy) 100%);
+  --gradient-brand-accent: linear-gradient(45deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 25%, var(--brand-light-blue) 50%, var(--brand-rich-teal) 75%, var(--brand-primary-blue) 100%);
+  --gradient-sunset: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --gradient-ocean: linear-gradient(135deg, #2e3192 0%, #1bffff 100%);
+  --gradient-forest: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+  --gradient-fire: linear-gradient(135deg, #f83600 0%, #f9d423 100%);
+}
+
+/* Chart Colors */
+:root {
+  --chart-1: #667eea;
+  --chart-2: #764ba2;
+  --chart-3: #f093fb;
+  --chart-4: #f5576c;
+  --chart-5: #fa709a;
+}
+
+/* Brand Hover Effects */
+.brand-hover {
+  transition: all 0.2s ease;
+}
+
+.brand-hover:hover {
+  background: var(--gradient-hero);
+  color: white;
+}
+
+.brand-dropdown-item {
+  transition: all 0.2s ease;
+}
+
+.brand-dropdown-item:hover {
+  background: var(--gradient-hero);
+  color: white;
+}
+
+/* Loan Officer Portal Root */
+#frs-partnership-portal-root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Quick Stats Cards */
+.quick-stats-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quick-stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Status Badges */
+.status-badge-hot {
+  background: var(--gradient-fire);
+  color: white;
+}
+
+.status-badge-warm {
+  background: var(--gradient-sunset);
+  color: white;
+}
+
+.status-badge-cold {
+  background: var(--gradient-ocean);
+  color: white;
+}
+
+/* Loading States */
+.loan-officer-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+/* Responsive Tables */
+@media (max-width: 768px) {
+  .loan-officer-table {
+    overflow-x: auto;
+  }
+}
+
+/* Equal Height Grid Items - Dashboard Style */
+.grid-equal-height > * {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-equal-height > * > * {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
