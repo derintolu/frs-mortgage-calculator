@@ -462,24 +462,28 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
         >
           {/* Mobile: Dropdown selector */}
           <div className="md:hidden mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Calculator Type</label>
             <Select value={activeTab} onValueChange={setActiveTab}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger
+                className="w-full h-12 text-base font-medium border-2 rounded-lg"
+                style={{ borderColor: gradientStart }}
+              >
                 <SelectValue placeholder="Select calculator type" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="conventional">Payment Calculator</SelectItem>
-                <SelectItem value="affordability">Affordability Calculator</SelectItem>
-                <SelectItem value="buydown">Buydown Calculator</SelectItem>
-                <SelectItem value="dscr">DSCR Calculator</SelectItem>
-                <SelectItem value="refinance">Refinance Calculator</SelectItem>
-                <SelectItem value="netproceeds">Net Proceeds Calculator</SelectItem>
-                <SelectItem value="rentvsbuy">Rent vs Buy Calculator</SelectItem>
+              <SelectContent className="rounded-lg border-2 shadow-lg">
+                <SelectItem value="conventional" className="py-3 text-base">Payment Calculator</SelectItem>
+                <SelectItem value="affordability" className="py-3 text-base">Affordability Calculator</SelectItem>
+                <SelectItem value="buydown" className="py-3 text-base">Buydown Calculator</SelectItem>
+                <SelectItem value="dscr" className="py-3 text-base">DSCR Calculator</SelectItem>
+                <SelectItem value="refinance" className="py-3 text-base">Refinance Calculator</SelectItem>
+                <SelectItem value="netproceeds" className="py-3 text-base">Net Proceeds Calculator</SelectItem>
+                <SelectItem value="rentvsbuy" className="py-3 text-base">Rent vs Buy Calculator</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {/* Desktop: Tabs */}
-          <TabsList className="!flex md:!grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 mb-6 gap-1 w-full">
+          {/* Desktop: Tabs - hidden on mobile */}
+          <TabsList className="hidden md:!grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 mb-6 gap-1 w-full">
             <TabsTrigger value="conventional">Payment</TabsTrigger>
             <TabsTrigger value="affordability">Affordability</TabsTrigger>
             <TabsTrigger value="buydown">Buydown</TabsTrigger>
