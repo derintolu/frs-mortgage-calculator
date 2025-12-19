@@ -34,8 +34,21 @@ function init() {
 
     // Add CORS headers for external embedding
     add_action( 'rest_api_init', __NAMESPACE__ . '\\add_cors_headers' );
+
+    // Add type="module" to our script
+    add_filter( 'script_loader_tag', __NAMESPACE__ . '\\add_module_type', 10, 3 );
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\init' );
+
+/**
+ * Add type="module" to our script tag for ES module support
+ */
+function add_module_type( $tag, $handle, $src ) {
+    if ( 'frs-mortgage-calculator' !== $handle ) {
+        return $tag;
+    }
+    return str_replace( ' src=', ' type="module" src=', $tag );
+}
 
 /**
  * Add CORS headers for widget embedding on external sites

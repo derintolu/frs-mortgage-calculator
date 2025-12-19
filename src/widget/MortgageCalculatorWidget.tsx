@@ -34,6 +34,8 @@ export interface WidgetConfig {
   gradientStart?: string;  // e.g., "#ff6b6b"
   gradientEnd?: string;    // e.g., "#feca57"
   borderColor?: string;    // Optional solid border color override
+  apiUrl?: string;         // REST API base URL for leads endpoint
+  nonce?: string;          // WP nonce for authentication
 }
 
 interface LoanOfficerData {

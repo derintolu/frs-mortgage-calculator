@@ -205,39 +205,18 @@ export function DSCRCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent
-            onEmailMe={onEmailMe}
-            onShare={onShare}
-            brandColor={brandColor}
-            results={{
-              type: 'dscr',
-              inputs: { propertyValue, downPaymentPercent, interestRate, loanTerm, monthlyRent, annualTaxes, annualInsurance, maintenance },
-              outputs: { dscr, monthlyPayment, monthlyNOI },
-              summary: {
-                title: 'DSCR Calculator Results',
-                primaryLabel: 'Debt Service Coverage Ratio',
-                primaryValue: `${dscr.toFixed(2)}x`,
-                items: [
-                  { label: 'Monthly Rent', value: `$${monthlyRent.toLocaleString()}` },
-                  { label: 'Monthly Payment', value: `$${monthlyPayment.toLocaleString()}` },
-                  { label: 'Net Operating Income', value: `$${monthlyNOI.toLocaleString()}/mo` },
-                  { label: 'Loan Amount', value: `$${(propertyValue * (1 - downPaymentPercent / 100)).toLocaleString()}` }
-                ]
-              }
-            }}
-          />
+          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
         )}
       </div>
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-        color: '#ffffff'
+        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)'
       }}>
         <CardHeader className="bg-black/20">
-          <CardTitle style={{ color: '#ffffff' }}>DSCR Analysis</CardTitle>
+          <CardTitle className="text-white">DSCR Analysis</CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
+        <CardContent className="pt-6 space-y-4 text-white">
           <div className="text-center pb-4 border-b border-white/20">
             <p className="text-sm opacity-90 mb-1">Debt Service Coverage Ratio</p>
             <p className="text-5xl font-bold mb-2">

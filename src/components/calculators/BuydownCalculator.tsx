@@ -186,39 +186,18 @@ export function BuydownCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent
-            onEmailMe={onEmailMe}
-            onShare={onShare}
-            brandColor={brandColor}
-            results={{
-              type: 'buydown',
-              inputs: { homePrice, downPayment, interestRate, loanTerm, buydownType },
-              outputs: { standardPayment, buydownPayments, buydownCost },
-              summary: {
-                title: 'Buydown Calculator Results',
-                primaryLabel: 'Standard Payment',
-                primaryValue: `$${standardPayment.toLocaleString()}`,
-                items: [
-                  { label: 'Buydown Type', value: buydownType },
-                  { label: 'Year 1 Payment', value: `$${buydownPayments[0]?.toLocaleString() || 'N/A'}` },
-                  { label: 'Buydown Cost', value: `$${buydownCost.toLocaleString()}` },
-                  { label: 'Loan Amount', value: `$${(homePrice - downPayment).toLocaleString()}` }
-                ]
-              }
-            }}
-          />
+          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
         )}
       </div>
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-        color: '#ffffff'
+        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)'
       }}>
         <CardHeader className="bg-black/20">
-          <CardTitle style={{ color: '#ffffff' }}>Buydown Summary</CardTitle>
+          <CardTitle className="text-white">Buydown Summary</CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
+        <CardContent className="pt-6 space-y-4 text-white">
           <div className="text-center pb-4 border-b border-white/20">
             <p className="text-sm opacity-90 mb-1">Standard Payment</p>
             <p className="text-4xl font-bold">

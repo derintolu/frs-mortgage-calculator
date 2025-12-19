@@ -44,13 +44,12 @@ export function ResultsCard({ results }: { results: CalculationResults }) {
 
   return (
     <Card className="h-full" style={{
-      background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-      color: '#ffffff'
+      background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)'
     }}>
       <CardHeader className="bg-black/20">
-        <CardTitle style={{ color: '#ffffff' }}>Payment Summary</CardTitle>
+        <CardTitle className="text-white">Payment Summary</CardTitle>
       </CardHeader>
-      <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
+      <CardContent className="pt-6 space-y-4 text-white">
         <div className="text-center pb-4 border-b border-white/20">
           <p className="text-sm opacity-90 mb-1">Monthly Payment</p>
           <p className="text-4xl font-bold">
@@ -161,13 +160,12 @@ export function ResultsCard({ results }: { results: CalculationResults }) {
 export function RefinanceResultsCard({ results }: { results: ReturnType<typeof calculateRefinance> }) {
   return (
     <Card className="h-fit" style={{
-      background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-      color: '#ffffff'
+      background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)'
     }}>
       <CardHeader className="bg-black/20">
-        <CardTitle style={{ color: '#ffffff' }}>Refinance Summary</CardTitle>
+        <CardTitle className="text-white">Refinance Summary</CardTitle>
       </CardHeader>
-      <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
+      <CardContent className="pt-6 space-y-4 text-white">
         <div className="text-center pb-4 border-b border-white/20">
           <p className="text-sm opacity-90 mb-1">New Monthly Payment</p>
           <p className="text-4xl font-bold">
@@ -209,13 +207,12 @@ export function RefinanceResultsCard({ results }: { results: ReturnType<typeof c
 export function AffordabilityResultsCard({ results }: { results: ReturnType<typeof calculateAffordability> }) {
   return (
     <Card className="h-fit" style={{
-      background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-      color: '#ffffff'
+      background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)'
     }}>
       <CardHeader className="bg-black/20">
-        <CardTitle style={{ color: '#ffffff' }}>What You Can Afford</CardTitle>
+        <CardTitle className="text-white">What You Can Afford</CardTitle>
       </CardHeader>
-      <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
+      <CardContent className="pt-6 space-y-4 text-white">
         <div className="text-center pb-4 border-b border-white/20">
           <p className="text-sm opacity-90 mb-1">Maximum Home Price</p>
           <p className="text-4xl font-bold">

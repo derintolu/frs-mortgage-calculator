@@ -275,40 +275,18 @@ export function RentVsBuyCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent
-            onEmailMe={onEmailMe}
-            onShare={onShare}
-            brandColor={brandColor}
-            results={{
-              type: 'rentvsbuy',
-              inputs: { monthlyRent, homePrice, downPayment, interestRate, loanTerm, propertyTax, insurance, appreciation, rentIncrease, yearsToCompare },
-              outputs: { totalRentCost, totalBuyCost, buyIsBetter, savings },
-              summary: {
-                title: 'Rent vs Buy Calculator Results',
-                primaryLabel: `After ${yearsToCompare} years`,
-                primaryValue: buyIsBetter ? 'Buying is Better' : 'Renting is Better',
-                items: [
-                  { label: 'Total Rent Cost', value: `$${totalRentCost.toLocaleString()}` },
-                  { label: 'Total Buy Cost', value: `$${totalBuyCost.toLocaleString()}` },
-                  { label: 'Savings', value: `$${Math.abs(savings).toLocaleString()}` },
-                  { label: 'Monthly Rent', value: `$${monthlyRent.toLocaleString()}` },
-                  { label: 'Home Price', value: `$${homePrice.toLocaleString()}` }
-                ]
-              }
-            }}
-          />
+          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
         )}
       </div>
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-        color: '#ffffff'
+        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)'
       }}>
         <CardHeader className="bg-black/20">
-          <CardTitle style={{ color: '#ffffff' }}>Comparison Results</CardTitle>
+          <CardTitle className="text-white">Comparison Results</CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
+        <CardContent className="pt-6 space-y-4 text-white">
           <div className="text-center pb-4 border-b border-white/20">
             <p className="text-sm opacity-90 mb-1">After {yearsToCompare} years</p>
             <p className={`text-4xl font-bold mb-2 ${buyIsBetter ? 'text-green-300' : 'text-blue-300'}`}>

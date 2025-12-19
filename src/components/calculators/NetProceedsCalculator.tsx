@@ -142,40 +142,18 @@ export function NetProceedsCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent
-            onEmailMe={onEmailMe}
-            onShare={onShare}
-            brandColor={brandColor}
-            results={{
-              type: 'netproceeds',
-              inputs: { salePrice, mortgageBalance, commissionRate, closingCostsRate, repairs, propertytax },
-              outputs: { netProceeds, commission, closingCosts, totalDeductions },
-              summary: {
-                title: 'Net Proceeds Calculator Results',
-                primaryLabel: 'Estimated Net Proceeds',
-                primaryValue: `$${netProceeds.toLocaleString()}`,
-                items: [
-                  { label: 'Sale Price', value: `$${salePrice.toLocaleString()}` },
-                  { label: 'Mortgage Balance', value: `$${mortgageBalance.toLocaleString()}` },
-                  { label: 'Commission', value: `$${commission.toLocaleString()}` },
-                  { label: 'Closing Costs', value: `$${closingCosts.toLocaleString()}` },
-                  { label: 'Total Deductions', value: `$${totalDeductions.toLocaleString()}` }
-                ]
-              }
-            }}
-          />
+          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
         )}
       </div>
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-        color: '#ffffff'
+        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)'
       }}>
         <CardHeader className="bg-black/20">
-          <CardTitle style={{ color: '#ffffff' }}>Net Proceeds</CardTitle>
+          <CardTitle className="text-white">Net Proceeds</CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
+        <CardContent className="pt-6 space-y-4 text-white">
           <div className="text-center pb-4 border-b border-white/20">
             <p className="text-sm opacity-90 mb-1">Estimated Net Proceeds</p>
             <p className="text-4xl font-bold mb-1">

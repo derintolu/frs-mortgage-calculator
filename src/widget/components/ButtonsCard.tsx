@@ -25,7 +25,7 @@ export function ButtonsCard({ onEmailMe, onShare, brandColor, results }: Buttons
   return (
     <Card className="lg:col-span-2">
       <CardContent className="p-6">
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <Button
             onClick={() => onEmailMe(results)}
             className="flex-1"
