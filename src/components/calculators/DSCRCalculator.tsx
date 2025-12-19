@@ -211,12 +211,13 @@ export function DSCRCalculator({
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)'
+        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
+        color: '#ffffff'
       }}>
         <CardHeader className="bg-black/20">
-          <CardTitle className="text-white">DSCR Analysis</CardTitle>
+          <CardTitle style={{ color: '#ffffff' }}>DSCR Analysis</CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 space-y-4 text-white">
+        <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
           <div className="text-center pb-4 border-b border-white/20">
             <p className="text-sm opacity-90 mb-1">Debt Service Coverage Ratio</p>
             <p className="text-5xl font-bold mb-2">
