@@ -500,7 +500,7 @@ function send_email_via_resend( $to, $subject, $html, $reply_to = '' ) {
     $api_key = 're_TrFAirDw_CBiSGJbAYZHWYpMc72PespZ3';
 
     $body = [
-        'from'    => 'Mortgage Calculator <calculator@21clending.com>',
+        'from'    => 'Mortgage Calculator <calculator@tools.21stcenturylending.com>',
         'to'      => [ $to ],
         'subject' => $subject,
         'html'    => $html,
