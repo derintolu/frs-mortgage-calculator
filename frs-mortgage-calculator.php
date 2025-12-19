@@ -1,11 +1,16 @@
 <?php
 /**
  * Plugin Name: FRS Mortgage Calculator
+ * Plugin URI: https://21stcenturylending.com
  * Description: Embeddable mortgage calculator widget with lead capture - can be shared on external websites
  * Version: 1.0.0
- * Author: 21st Century Lending
- * Text Domain: frs-mortgage-calculator
+ * Requires at least: 6.0
  * Requires PHP: 8.0
+ * Author: 21st Century Lending
+ * Author URI: https://21stcenturylending.com
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: frs-mortgage-calculator
  */
 
 namespace FRSMortgageCalculator;
