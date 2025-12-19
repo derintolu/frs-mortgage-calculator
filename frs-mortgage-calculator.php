@@ -336,17 +336,17 @@ function submit_lead( \WP_REST_Request $request ) {
     // Build email HTML
     $email_html = build_results_email( $name, $calculator_type, $results, $lo_name, $lo_email, $lo_phone, $lo_nmls );
 
-    // Send email based on action
-    $headers = [ 'Content-Type: text/html; charset=UTF-8' ];
-
+    // Send email via Resend API
     if ( $action === 'email-me' ) {
-        // Send results to the user
         $subject = 'Your Mortgage Calculator Results';
-        wp_mail( $email, $subject, $email_html, $headers );
+        $to_email = $email;
     } elseif ( $action === 'share' ) {
-        // Send results to recipient
         $subject = $name . ' shared mortgage calculator results with you';
-        wp_mail( $recipient_email, $subject, $email_html, $headers );
+        $to_email = $recipient_email;
+    }
+
+    if ( ! empty( $to_email ) ) {
+        send_email_via_resend( $to_email, $subject, $email_html, $lo_email );
     }
 
     // Store lead if they want contact or it's a direct lead submission
@@ -491,6 +491,46 @@ function build_results_email( $name, $calculator_type, $results, $lo_name, $lo_e
 HTML;
 
     return $html;
+}
+
+/**
+ * Send email via Resend API
+ */
+function send_email_via_resend( $to, $subject, $html, $reply_to = '' ) {
+    $api_key = 're_TrFAirDw_CBiSGJbAYZHWYpMc72PespZ3';
+
+    $body = [
+        'from'    => 'Mortgage Calculator <calculator@21clending.com>',
+        'to'      => [ $to ],
+        'subject' => $subject,
+        'html'    => $html,
+    ];
+
+    if ( ! empty( $reply_to ) ) {
+        $body['reply_to'] = $reply_to;
+    }
+
+    $response = wp_remote_post( 'https://api.resend.com/emails', [
+        'headers' => [
+            'Authorization' => 'Bearer ' . $api_key,
+            'Content-Type'  => 'application/json',
+        ],
+        'body'    => wp_json_encode( $body ),
+        'timeout' => 30,
+    ]);
+
+    if ( is_wp_error( $response ) ) {
+        error_log( 'Resend API error: ' . $response->get_error_message() );
+        return false;
+    }
+
+    $response_code = wp_remote_retrieve_response_code( $response );
+    if ( $response_code !== 200 ) {
+        error_log( 'Resend API error: ' . wp_remote_retrieve_body( $response ) );
+        return false;
+    }
+
+    return true;
 }
 
 /**
