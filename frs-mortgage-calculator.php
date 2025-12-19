@@ -197,7 +197,7 @@ function render_shortcode( $atts ) {
         }
     }
 
-    return '<div id="mortgage-calculator" class="frs-mortgage-calculator-widget"' . $attr_string . '></div>';
+    return '<div id="frs-mc-root" class="frs-mortgage-calculator-widget"' . $attr_string . '></div>';
 }
 
 /**
@@ -221,7 +221,7 @@ function render_embed_code( $atts ) {
     $embed_code = sprintf(
         '<!-- FRS Mortgage Calculator Widget -->
 <link rel="stylesheet" href="%s">
-<div id="mortgage-calculator"
+<div id="frs-mc-root"
      data-loan-officer-id="%d"
      data-loan-officer-name="%s"
      data-loan-officer-email="%s"
