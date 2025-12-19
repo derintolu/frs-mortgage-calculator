@@ -2,19 +2,32 @@ import { Card, CardContent } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Mail, Share2 } from 'lucide-react';
 
-interface ButtonsCardProps {
-  onEmailMe: () => void;
-  onShare: () => void;
-  brandColor: string;
+interface CalculatorResults {
+  type: string;
+  inputs: Record<string, any>;
+  outputs: Record<string, any>;
+  summary: {
+    title: string;
+    primaryValue: string;
+    primaryLabel: string;
+    items: Array<{ label: string; value: string }>;
+  };
 }
 
-export function ButtonsCard({ onEmailMe, onShare, brandColor }: ButtonsCardProps) {
+interface ButtonsCardProps {
+  onEmailMe: (results?: CalculatorResults) => void;
+  onShare: (results?: CalculatorResults) => void;
+  brandColor: string;
+  results?: CalculatorResults;
+}
+
+export function ButtonsCard({ onEmailMe, onShare, brandColor, results }: ButtonsCardProps) {
   return (
     <Card className="lg:col-span-2">
       <CardContent className="p-6">
         <div className="flex flex-col sm:flex-row gap-3">
           <Button
-            onClick={onEmailMe}
+            onClick={() => onEmailMe(results)}
             className="flex-1"
             size="lg"
             style={{ backgroundColor: brandColor }}
@@ -23,7 +36,7 @@ export function ButtonsCard({ onEmailMe, onShare, brandColor }: ButtonsCardProps
             Email Me Results
           </Button>
           <Button
-            onClick={onShare}
+            onClick={() => onShare(results)}
             className="flex-1"
             size="lg"
             variant="outline"

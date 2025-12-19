@@ -49,6 +49,19 @@ interface LoanOfficerData {
   profile_image?: string;
 }
 
+// Generic results type that can hold any calculator's output
+interface CalculatorResults {
+  type: string;
+  inputs: Record<string, any>;
+  outputs: Record<string, any>;
+  summary: {
+    title: string;
+    primaryValue: string;
+    primaryLabel: string;
+    items: Array<{ label: string; value: string }>;
+  };
+}
+
 interface LeadFormData {
   name: string;
   email: string;
@@ -149,17 +162,21 @@ function LoanOfficerProfile({
 // Email Results Modal Component
 function EmailResultsModal({
   mode,
+  apiUrl,
   webhookUrl,
   brandColor,
   loanOfficer,
   calculatorType,
+  results,
   onOpenChange
 }: {
   mode: 'email-me' | 'share';
+  apiUrl?: string;
   webhookUrl?: string;
   brandColor: string;
   loanOfficer?: LoanOfficerData;
   calculatorType: string;
+  results?: CalculatorResults;
   onOpenChange?: (open: boolean) => void;
 }) {
   const [leadData, setLeadData] = useState<LeadFormData>({
@@ -189,36 +206,34 @@ function EmailResultsModal({
 
     const payload = {
       action: mode,
-      lead: {
-        name: leadData.name,
-        email: leadData.email,
-        phone: leadData.phone,
-        wantsContact: leadData.wantsContact
-      },
-      ...(mode === 'share' && { recipient: { email: leadData.recipientEmail } }),
-      calculator: {
-        type: calculatorType
-      },
-      loanOfficer: loanOfficer ? {
-        id: loanOfficer.id,
-        name: `${loanOfficer.first_name} ${loanOfficer.last_name}`,
-        email: loanOfficer.email,
-        nmls: loanOfficer.nmls || loanOfficer.nmls_number
-      } : null,
-      timestamp: new Date().toISOString(),
-      source: 'mortgage-calculator-widget',
-      url: window.location.href
+      name: leadData.name,
+      email: leadData.email,
+      phone: leadData.phone,
+      recipient_email: leadData.recipientEmail,
+      wants_contact: leadData.wantsContact,
+      loan_officer_id: loanOfficer?.id || 0,
+      calculator_type: calculatorType,
+      results: results || {},
+      webhook_url: webhookUrl || ''
     };
 
     try {
-      if (webhookUrl) {
-        await fetch(webhookUrl, {
+      // Use REST API endpoint if available, otherwise fall back to webhook
+      const endpoint = apiUrl ? `${apiUrl}/leads` : webhookUrl;
+
+      if (endpoint) {
+        const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(payload)
         });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to send');
+        }
       }
 
       setSubmitSuccess(true);
@@ -235,7 +250,7 @@ function EmailResultsModal({
       }, 2000);
     } catch (error) {
       console.error('Error submitting:', error);
-      setSubmitError('Failed to submit. Please try again.');
+      setSubmitError(error instanceof Error ? error.message : 'Failed to submit. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -370,6 +385,7 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [emailMode, setEmailMode] = useState<'email-me' | 'share'>('email-me');
+  const [currentResults, setCurrentResults] = useState<CalculatorResults | null>(null);
 
   // Fetch loan officer profile if ID provided
   useEffect(() => {
@@ -387,12 +403,14 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
     }
   }, [loanOfficerId]);
 
-  const handleEmailMe = () => {
+  const handleEmailMe = (results?: CalculatorResults) => {
+    if (results) setCurrentResults(results);
     setEmailMode('email-me');
     setEmailModalOpen(true);
   };
 
-  const handleShare = () => {
+  const handleShare = (results?: CalculatorResults) => {
+    if (results) setCurrentResults(results);
     setEmailMode('share');
     setEmailModalOpen(true);
   };
@@ -461,7 +479,7 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
           gradientEnd={gradientEnd}
         >
           {/* Mobile: Dropdown selector */}
-          <div className="md:hidden mb-6">
+          <div className="frs-mc-mobile-nav mb-6 p-4 rounded-lg border-2" style={{ borderColor: gradientStart }}>
             <label className="block text-sm font-medium text-gray-700 mb-2">Calculator Type</label>
             <Select value={activeTab} onValueChange={setActiveTab}>
               <SelectTrigger
@@ -482,8 +500,8 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
             </Select>
           </div>
 
-          {/* Desktop: Tabs - hidden on mobile */}
-          <TabsList className="hidden md:!grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 mb-6 gap-1 w-full">
+          {/* Desktop: Tabs */}
+          <TabsList className="frs-mc-desktop-nav grid grid-cols-4 lg:grid-cols-7 mb-6 gap-1 w-full">
             <TabsTrigger value="conventional">Payment</TabsTrigger>
             <TabsTrigger value="affordability">Affordability</TabsTrigger>
             <TabsTrigger value="buydown">Buydown</TabsTrigger>
@@ -585,10 +603,12 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
       <Dialog open={emailModalOpen} onOpenChange={setEmailModalOpen}>
         <EmailResultsModal
           mode={emailMode}
+          apiUrl={config.apiUrl}
           webhookUrl={webhookUrl}
           brandColor={brandColor}
           loanOfficer={loanOfficer || undefined}
           calculatorType={activeTab}
+          results={currentResults || undefined}
           onOpenChange={setEmailModalOpen}
         />
       </Dialog>

@@ -5,6 +5,7 @@ import { MortgageSelect } from '../ui/mortgage-select';
 import { Calculator } from 'lucide-react';
 import {
   calculateAffordability,
+  formatCurrency,
   type AffordabilityInputs
 } from '../../utils/mortgageCalculations';
 import { AffordabilityResultsCard } from './ResultsCard';
@@ -140,7 +141,28 @@ export function AffordabilityCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
+          <ButtonsComponent
+            onEmailMe={onEmailMe}
+            onShare={onShare}
+            brandColor={brandColor}
+            results={{
+              type: 'affordability',
+              inputs,
+              outputs: results,
+              summary: {
+                title: 'Affordability Calculator Results',
+                primaryLabel: 'Maximum Home Price',
+                primaryValue: formatCurrency(results.maxHomePrice),
+                items: [
+                  { label: 'Monthly Payment', value: formatCurrency(results.monthlyPayment) },
+                  { label: 'Maximum Loan Amount', value: formatCurrency(results.maxLoanAmount) },
+                  { label: 'Principal & Interest', value: formatCurrency(results.principalAndInterest) },
+                  ...(results.monthlyTax ? [{ label: 'Property Tax', value: formatCurrency(results.monthlyTax) }] : []),
+                  ...(results.monthlyInsurance ? [{ label: 'Insurance', value: formatCurrency(results.monthlyInsurance) }] : [])
+                ]
+              }
+            }}
+          />
         )}
       </div>
 

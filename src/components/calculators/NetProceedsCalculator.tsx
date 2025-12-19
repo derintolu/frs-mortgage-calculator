@@ -148,12 +148,13 @@ export function NetProceedsCalculator({
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)'
+        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
+        color: '#ffffff'
       }}>
         <CardHeader className="bg-black/20">
-          <CardTitle className="text-white">Net Proceeds</CardTitle>
+          <CardTitle style={{ color: '#ffffff' }}>Net Proceeds</CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 space-y-4 text-white">
+        <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
           <div className="text-center pb-4 border-b border-white/20">
             <p className="text-sm opacity-90 mb-1">Estimated Net Proceeds</p>
             <p className="text-4xl font-bold mb-1">

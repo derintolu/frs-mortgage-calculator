@@ -169,7 +169,39 @@ export function ConventionalCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
+          <ButtonsComponent
+            onEmailMe={onEmailMe}
+            onShare={onShare}
+            brandColor={brandColor}
+            results={{
+              type: 'conventional',
+              inputs: {
+                homePrice: inputs.homePrice,
+                downPayment: inputs.downPayment,
+                interestRate: inputs.interestRate,
+                loanTerm: inputs.loanTerm,
+                propertyTax: inputs.propertyTax,
+                insurance: inputs.insurance,
+                hoa: inputs.hoa
+              },
+              outputs: results,
+              summary: {
+                title: 'Payment Calculator Results',
+                primaryLabel: 'Monthly Payment',
+                primaryValue: formatCurrency(results.monthlyPayment),
+                items: [
+                  { label: 'Principal & Interest', value: formatCurrency(results.principalAndInterest) },
+                  ...(results.monthlyTax ? [{ label: 'Property Tax', value: formatCurrency(results.monthlyTax) }] : []),
+                  ...(results.monthlyInsurance ? [{ label: 'Insurance', value: formatCurrency(results.monthlyInsurance) }] : []),
+                  ...(results.monthlyHOA ? [{ label: 'HOA', value: formatCurrency(results.monthlyHOA) }] : []),
+                  ...(results.monthlyPMI ? [{ label: 'PMI/MIP', value: formatCurrency(results.monthlyPMI) }] : []),
+                  { label: 'Loan Amount', value: formatCurrency(results.loanAmount || 0) },
+                  { label: 'Total Interest', value: formatCurrency(results.totalInterest) },
+                  { label: 'Total Payment', value: formatCurrency(results.totalPayment) }
+                ]
+              }
+            }}
+          />
         )}
       </div>
 

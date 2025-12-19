@@ -55,7 +55,7 @@ function add_cors_headers() {
  */
 function get_widget_assets() {
     $dist_dir = FRS_MC_DIR . 'assets/dist/';
-    $manifest_path = $dist_dir . '.vite/manifest.json';
+    $manifest_path = $dist_dir . 'manifest.json';
 
     $js_url = '';
     $css_url = '';
@@ -152,6 +152,15 @@ function get_user_data( $user_id ) {
  * Render the calculator shortcode
  */
 function render_shortcode( $atts ) {
+    // Always enqueue assets when shortcode is rendered
+    $assets = get_widget_assets();
+    if ( $assets['css'] ) {
+        wp_enqueue_style( 'frs-mortgage-calculator', $assets['css'], [], FRS_MC_VERSION );
+    }
+    if ( $assets['js'] ) {
+        wp_enqueue_script( 'frs-mortgage-calculator', $assets['js'], [], FRS_MC_VERSION, true );
+    }
+
     $atts = shortcode_atts(
         [
             'user_id'        => 0,
@@ -298,65 +307,190 @@ function register_rest_routes() {
 function submit_lead( \WP_REST_Request $request ) {
     $params = $request->get_json_params();
 
+    $action = sanitize_text_field( $params['action'] ?? 'lead' ); // 'lead', 'email-me', 'share'
     $name = sanitize_text_field( $params['name'] ?? '' );
     $email = sanitize_email( $params['email'] ?? '' );
     $phone = sanitize_text_field( $params['phone'] ?? '' );
+    $recipient_email = sanitize_email( $params['recipient_email'] ?? '' );
+    $wants_contact = (bool) ( $params['wants_contact'] ?? false );
     $loan_officer_id = absint( $params['loan_officer_id'] ?? 0 );
     $calculator_type = sanitize_text_field( $params['calculator_type'] ?? 'mortgage' );
-    $calculation_data = $params['calculation_data'] ?? [];
+    $results = $params['results'] ?? [];
     $webhook_url = esc_url_raw( $params['webhook_url'] ?? '' );
 
     if ( empty( $name ) || empty( $email ) ) {
         return new \WP_Error( 'missing_fields', 'Name and email are required', [ 'status' => 400 ] );
     }
 
-    // Store lead in wp_lead_submissions table
-    global $wpdb;
-    $table = $wpdb->prefix . 'lead_submissions';
-
-    $name_parts = explode( ' ', $name, 2 );
-    $lead_data = [
-        'first_name'       => $name_parts[0],
-        'last_name'        => $name_parts[1] ?? '',
-        'email'            => $email,
-        'phone'            => $phone,
-        'loan_officer_id'  => $loan_officer_id,
-        'lead_source'      => 'Mortgage Calculator - ' . ucfirst( $calculator_type ),
-        'notes'            => wp_json_encode( $calculation_data ),
-        'status'           => 'new',
-        'created_at'       => current_time( 'mysql' ),
-        'updated_at'       => current_time( 'mysql' ),
-    ];
-
-    $inserted = $wpdb->insert( $table, $lead_data );
-    $lead_id = $inserted ? $wpdb->insert_id : 0;
-
-    // Send to webhook if provided
-    if ( $webhook_url ) {
-        wp_remote_post( $webhook_url, [
-            'body'    => wp_json_encode( array_merge( $lead_data, [ 'lead_id' => $lead_id ] ) ),
-            'headers' => [ 'Content-Type' => 'application/json' ],
-            'timeout' => 10,
-        ]);
+    if ( $action === 'share' && empty( $recipient_email ) ) {
+        return new \WP_Error( 'missing_recipient', 'Recipient email is required for sharing', [ 'status' => 400 ] );
     }
 
-    // Email notification to loan officer
-    if ( $loan_officer_id ) {
-        $lo = get_userdata( $loan_officer_id );
-        if ( $lo && $lo->user_email ) {
-            $subject = 'New Mortgage Calculator Lead: ' . $name;
-            $message = "New lead from your mortgage calculator:\n\n";
-            $message .= "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\n";
-            $message .= "Calculator: {$calculator_type}\n";
-            wp_mail( $lo->user_email, $subject, $message );
+    // Get loan officer data
+    $lo_data = $loan_officer_id ? get_user_data( $loan_officer_id ) : [];
+    $lo_name = $lo_data['name'] ?? 'Your Loan Officer';
+    $lo_email = $lo_data['email'] ?? '';
+    $lo_phone = $lo_data['phone'] ?? '';
+    $lo_nmls = $lo_data['nmls'] ?? '';
+
+    // Build email HTML
+    $email_html = build_results_email( $name, $calculator_type, $results, $lo_name, $lo_email, $lo_phone, $lo_nmls );
+
+    // Send email based on action
+    $headers = [ 'Content-Type: text/html; charset=UTF-8' ];
+
+    if ( $action === 'email-me' ) {
+        // Send results to the user
+        $subject = 'Your Mortgage Calculator Results';
+        wp_mail( $email, $subject, $email_html, $headers );
+    } elseif ( $action === 'share' ) {
+        // Send results to recipient
+        $subject = $name . ' shared mortgage calculator results with you';
+        wp_mail( $recipient_email, $subject, $email_html, $headers );
+    }
+
+    // Store lead if they want contact or it's a direct lead submission
+    if ( $wants_contact || $action === 'lead' ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'lead_submissions';
+
+        $name_parts = explode( ' ', $name, 2 );
+        $lead_data = [
+            'first_name'       => $name_parts[0],
+            'last_name'        => $name_parts[1] ?? '',
+            'email'            => $email,
+            'phone'            => $phone,
+            'loan_officer_id'  => $loan_officer_id,
+            'lead_source'      => 'Mortgage Calculator - ' . ucfirst( $calculator_type ),
+            'notes'            => wp_json_encode( $results ),
+            'status'           => 'new',
+            'created_at'       => current_time( 'mysql' ),
+            'updated_at'       => current_time( 'mysql' ),
+        ];
+
+        $inserted = $wpdb->insert( $table, $lead_data );
+        $lead_id = $inserted ? $wpdb->insert_id : 0;
+
+        // Send to webhook if provided
+        if ( $webhook_url ) {
+            wp_remote_post( $webhook_url, [
+                'body'    => wp_json_encode( array_merge( $lead_data, [ 'lead_id' => $lead_id ] ) ),
+                'headers' => [ 'Content-Type' => 'application/json' ],
+                'timeout' => 10,
+            ]);
+        }
+
+        // Email notification to loan officer
+        if ( $loan_officer_id && $lo_email ) {
+            $lo_subject = 'New Mortgage Calculator Lead: ' . $name;
+            $lo_message = "New lead from your mortgage calculator:\n\n";
+            $lo_message .= "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\n";
+            $lo_message .= "Calculator: {$calculator_type}\n";
+            $lo_message .= "Wants Contact: " . ( $wants_contact ? 'Yes' : 'No' ) . "\n";
+            wp_mail( $lo_email, $lo_subject, $lo_message );
         }
     }
 
     return [
         'success' => true,
-        'lead_id' => $lead_id,
-        'message' => 'Lead submitted successfully',
+        'message' => $action === 'email-me' ? 'Results sent to your email' : ( $action === 'share' ? 'Results shared successfully' : 'Lead submitted successfully' ),
     ];
+}
+
+/**
+ * Build HTML email with calculator results
+ */
+function build_results_email( $name, $calculator_type, $results, $lo_name, $lo_email, $lo_phone, $lo_nmls ) {
+    $summary = $results['summary'] ?? [];
+    $primary_label = $summary['primaryLabel'] ?? 'Result';
+    $primary_value = $summary['primaryValue'] ?? 'N/A';
+    $items = $summary['items'] ?? [];
+    $title = $summary['title'] ?? ucfirst( str_replace( '-', ' ', $calculator_type ) ) . ' Calculator Results';
+
+    $items_html = '';
+    foreach ( $items as $item ) {
+        $items_html .= sprintf(
+            '<tr><td style="padding: 12px 0; border-bottom: 1px solid #e5e7eb; color: #6b7280;">%s</td><td style="padding: 12px 0; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 600; color: #111827;">%s</td></tr>',
+            esc_html( $item['label'] ),
+            esc_html( $item['value'] )
+        );
+    }
+
+    $html = <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f3f4f6;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+        <!-- Header -->
+        <tr>
+            <td style="background: linear-gradient(135deg, #2563eb 0%, #2dd4da 100%); padding: 32px; text-align: center;">
+                <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">{$title}</h1>
+            </td>
+        </tr>
+
+        <!-- Greeting -->
+        <tr>
+            <td style="padding: 32px 32px 16px;">
+                <p style="margin: 0; font-size: 16px; color: #374151;">Hi {$name},</p>
+                <p style="margin: 16px 0 0; font-size: 16px; color: #374151;">Here are your calculator results:</p>
+            </td>
+        </tr>
+
+        <!-- Primary Result -->
+        <tr>
+            <td style="padding: 0 32px;">
+                <div style="background: linear-gradient(135deg, #2563eb 0%, #2dd4da 100%); border-radius: 12px; padding: 24px; text-align: center;">
+                    <p style="margin: 0 0 8px; font-size: 14px; color: rgba(255,255,255,0.9);">{$primary_label}</p>
+                    <p style="margin: 0; font-size: 36px; font-weight: 700; color: #ffffff;">{$primary_value}</p>
+                </div>
+            </td>
+        </tr>
+
+        <!-- Breakdown -->
+        <tr>
+            <td style="padding: 24px 32px;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    {$items_html}
+                </table>
+            </td>
+        </tr>
+
+        <!-- Loan Officer -->
+        <tr>
+            <td style="padding: 0 32px 32px;">
+                <div style="background-color: #f9fafb; border-radius: 12px; padding: 24px;">
+                    <p style="margin: 0 0 12px; font-size: 14px; font-weight: 600; color: #374151;">Have questions? Contact your loan officer:</p>
+                    <p style="margin: 0; font-size: 16px; font-weight: 600; color: #111827;">{$lo_name}</p>
+                    <p style="margin: 4px 0 0; font-size: 14px; color: #6b7280;">NMLS# {$lo_nmls}</p>
+                    <p style="margin: 12px 0 0;">
+                        <a href="mailto:{$lo_email}" style="color: #2563eb; text-decoration: none; font-size: 14px;">{$lo_email}</a>
+                    </p>
+                    <p style="margin: 4px 0 0;">
+                        <a href="tel:{$lo_phone}" style="color: #2563eb; text-decoration: none; font-size: 14px;">{$lo_phone}</a>
+                    </p>
+                </div>
+            </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+            <td style="padding: 24px 32px; background-color: #f9fafb; text-align: center;">
+                <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                    This is an estimate only and does not constitute a loan commitment or guarantee.
+                    Actual rates and payments may vary based on your specific situation.
+                </p>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+HTML;
+
+    return $html;
 }
 
 /**

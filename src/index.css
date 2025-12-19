@@ -439,3 +439,19 @@ body.frs-portal-page main {
   display: flex;
   flex-direction: column;
 }
+/* FRS Mortgage Calculator responsive navigation */
+.frs-mc-mobile-nav {
+  display: block !important;
+}
+.frs-mc-desktop-nav {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .frs-mc-mobile-nav {
+    display: none !important;
+  }
+  .frs-mc-desktop-nav {
+    display: grid !important;
+  }
+}
