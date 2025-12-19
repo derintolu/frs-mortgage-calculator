@@ -275,7 +275,28 @@ export function RentVsBuyCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
+          <ButtonsComponent
+            onEmailMe={onEmailMe}
+            onShare={onShare}
+            brandColor={brandColor}
+            results={{
+              type: 'rentvsbuy',
+              inputs: { monthlyRent, homePrice, downPayment, interestRate, loanTerm, propertyTax, insurance, appreciation, rentIncrease, yearsToCompare },
+              outputs: { totalRentCost, totalBuyCost, buyIsBetter, savings },
+              summary: {
+                title: 'Rent vs Buy Calculator Results',
+                primaryLabel: `After ${yearsToCompare} years`,
+                primaryValue: buyIsBetter ? 'Buying is Better' : 'Renting is Better',
+                items: [
+                  { label: 'Total Rent Cost', value: `$${totalRentCost.toLocaleString()}` },
+                  { label: 'Total Buy Cost', value: `$${totalBuyCost.toLocaleString()}` },
+                  { label: 'Savings', value: `$${Math.abs(savings).toLocaleString()}` },
+                  { label: 'Monthly Rent', value: `$${monthlyRent.toLocaleString()}` },
+                  { label: 'Home Price', value: `$${homePrice.toLocaleString()}` }
+                ]
+              }
+            }}
+          />
         )}
       </div>
 

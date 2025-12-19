@@ -142,7 +142,28 @@ export function NetProceedsCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
+          <ButtonsComponent
+            onEmailMe={onEmailMe}
+            onShare={onShare}
+            brandColor={brandColor}
+            results={{
+              type: 'netproceeds',
+              inputs: { salePrice, mortgageBalance, commissionRate, closingCostsRate, repairs, propertytax },
+              outputs: { netProceeds, commission, closingCosts, totalDeductions },
+              summary: {
+                title: 'Net Proceeds Calculator Results',
+                primaryLabel: 'Estimated Net Proceeds',
+                primaryValue: `$${netProceeds.toLocaleString()}`,
+                items: [
+                  { label: 'Sale Price', value: `$${salePrice.toLocaleString()}` },
+                  { label: 'Mortgage Balance', value: `$${mortgageBalance.toLocaleString()}` },
+                  { label: 'Commission', value: `$${commission.toLocaleString()}` },
+                  { label: 'Closing Costs', value: `$${closingCosts.toLocaleString()}` },
+                  { label: 'Total Deductions', value: `$${totalDeductions.toLocaleString()}` }
+                ]
+              }
+            }}
+          />
         )}
       </div>
 

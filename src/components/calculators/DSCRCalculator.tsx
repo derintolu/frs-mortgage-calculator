@@ -205,7 +205,27 @@ export function DSCRCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
+          <ButtonsComponent
+            onEmailMe={onEmailMe}
+            onShare={onShare}
+            brandColor={brandColor}
+            results={{
+              type: 'dscr',
+              inputs: { propertyValue, downPaymentPercent, interestRate, loanTerm, monthlyRent, annualTaxes, annualInsurance, maintenance },
+              outputs: { dscr, monthlyPayment, monthlyNOI },
+              summary: {
+                title: 'DSCR Calculator Results',
+                primaryLabel: 'Debt Service Coverage Ratio',
+                primaryValue: `${dscr.toFixed(2)}x`,
+                items: [
+                  { label: 'Monthly Rent', value: `$${monthlyRent.toLocaleString()}` },
+                  { label: 'Monthly Payment', value: `$${monthlyPayment.toLocaleString()}` },
+                  { label: 'Net Operating Income', value: `$${monthlyNOI.toLocaleString()}/mo` },
+                  { label: 'Loan Amount', value: `$${(propertyValue * (1 - downPaymentPercent / 100)).toLocaleString()}` }
+                ]
+              }
+            }}
+          />
         )}
       </div>
 

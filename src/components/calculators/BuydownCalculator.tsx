@@ -186,7 +186,27 @@ export function BuydownCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
+          <ButtonsComponent
+            onEmailMe={onEmailMe}
+            onShare={onShare}
+            brandColor={brandColor}
+            results={{
+              type: 'buydown',
+              inputs: { homePrice, downPayment, interestRate, loanTerm, buydownType },
+              outputs: { standardPayment, buydownPayments, buydownCost },
+              summary: {
+                title: 'Buydown Calculator Results',
+                primaryLabel: 'Standard Payment',
+                primaryValue: `$${standardPayment.toLocaleString()}`,
+                items: [
+                  { label: 'Buydown Type', value: buydownType },
+                  { label: 'Year 1 Payment', value: `$${buydownPayments[0]?.toLocaleString() || 'N/A'}` },
+                  { label: 'Buydown Cost', value: `$${buydownCost.toLocaleString()}` },
+                  { label: 'Loan Amount', value: `$${(homePrice - downPayment).toLocaleString()}` }
+                ]
+              }
+            }}
+          />
         )}
       </div>
 

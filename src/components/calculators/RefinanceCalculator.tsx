@@ -135,7 +135,27 @@ export function RefinanceCalculator({
         </Card>
 
         {showButtons && ButtonsComponent && onEmailMe && onShare && (
-          <ButtonsComponent onEmailMe={onEmailMe} onShare={onShare} brandColor={brandColor} />
+          <ButtonsComponent
+            onEmailMe={onEmailMe}
+            onShare={onShare}
+            brandColor={brandColor}
+            results={{
+              type: 'refinance',
+              inputs,
+              outputs: results,
+              summary: {
+                title: 'Refinance Calculator Results',
+                primaryLabel: 'New Monthly Payment',
+                primaryValue: `$${results.monthlyPayment.toLocaleString()}`,
+                items: [
+                  { label: 'Monthly Savings', value: `$${results.monthlySavings.toLocaleString()}` },
+                  { label: 'Break-Even Point', value: `${results.breakEvenMonths} months` },
+                  { label: 'Lifetime Savings', value: `$${results.lifetimeSavings.toLocaleString()}` },
+                  { label: 'Total Interest', value: `$${results.totalInterest.toLocaleString()}` }
+                ]
+              }
+            }}
+          />
         )}
       </div>
 
