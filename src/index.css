@@ -478,3 +478,19 @@ body.frs-portal-page main {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 }
 
+/* Theme override: Keep input borders white on focus (override Tailwind Forms) */
+#frs-mc-root [type='text']:focus,
+#frs-mc-root [type='number']:focus,
+#frs-mc-root [type='email']:focus,
+#frs-mc-root [type='tel']:focus,
+#frs-mc-root input:where(:not([type])):focus,
+#frs-mc-root select:focus,
+#frs-mc-root textarea:focus,
+.frs-mortgage-calculator-widget [type='text']:focus,
+.frs-mortgage-calculator-widget [type='number']:focus,
+.frs-mortgage-calculator-widget input:focus {
+  --tw-ring-color: transparent !important;
+  border-color: white !important;
+  box-shadow: none !important;
+}
+
