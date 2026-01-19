@@ -1,16 +1,18 @@
 <?php
 /**
  * Plugin Name: FRS Mortgage Calculator
- * Plugin URI: https://21stcenturylending.com
+ * Plugin URI: https://myhub21.com
  * Description: Embeddable mortgage calculator widget with lead capture - can be shared on external websites
  * Version: 1.0.0
- * Requires at least: 6.0
- * Requires PHP: 8.0
- * Author: 21st Century Lending
- * Author URI: https://21stcenturylending.com
- * License: GPL v2 or later
+ * Author: Derin Tolu / FRS Brand Experience Teams
+ * Author URI: https://myhub21.com
+ * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: frs-mortgage-calculator
+ * Domain Path: /languages
+ * Requires at least: 6.0
+ * Requires PHP: 8.1
+ * Network: true
  */
 
 namespace FRSMortgageCalculator;
@@ -137,7 +139,7 @@ function get_user_data( $user_id ) {
     // Try to get profile data from frs-wp-users
     $profile_data = [];
     if ( class_exists( 'FRSUsers\Models\Profile' ) ) {
-        $profile = \FRSUsers\Models\Profile::where( 'user_id', $user_id )->first();
+        $profile = \FRSUsers\Models\Profile::get_by_user_id( $user_id );
         if ( $profile ) {
             $profile_data = $profile->toArray();
         }
