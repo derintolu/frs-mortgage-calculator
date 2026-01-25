@@ -3,7 +3,7 @@
  * Plugin Name: FRS Mortgage Calculator
  * Plugin URI: https://myhub21.com
  * Description: Embeddable mortgage calculator widget with lead capture - can be shared on external websites
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Derin Tolu / FRS Brand Experience Teams
  * Author URI: https://myhub21.com
  * License: GPL-2.0-or-later
