@@ -366,7 +366,7 @@ function submit_lead( \WP_REST_Request $request ) {
     }
 
     if ( ! empty( $to_email ) ) {
-        send_email_via_resend( $to_email, $subject, $email_html, $lo_email );
+        send_html_email( $to_email, $subject, $email_html, $lo_email );
     }
 
     // Store lead if they want contact or it's a direct lead submission
@@ -514,43 +514,22 @@ HTML;
 }
 
 /**
- * Send email via Resend API
+ * Send email via WordPress native mail
  */
-function send_email_via_resend( $to, $subject, $html, $reply_to = '' ) {
-    $api_key = 're_TrFAirDw_CBiSGJbAYZHWYpMc72PespZ3';
-
-    $body = [
-        'from'    => 'Mortgage Calculator <calculator@tools.21stcenturylending.com>',
-        'to'      => [ $to ],
-        'subject' => $subject,
-        'html'    => $html,
-    ];
+function send_html_email( $to, $subject, $html, $reply_to = '' ) {
+    $headers = [ 'Content-Type: text/html; charset=UTF-8' ];
 
     if ( ! empty( $reply_to ) ) {
-        $body['reply_to'] = $reply_to;
+        $headers[] = 'Reply-To: ' . $reply_to;
     }
 
-    $response = wp_remote_post( 'https://api.resend.com/emails', [
-        'headers' => [
-            'Authorization' => 'Bearer ' . $api_key,
-            'Content-Type'  => 'application/json',
-        ],
-        'body'    => wp_json_encode( $body ),
-        'timeout' => 30,
-    ]);
+    $sent = wp_mail( $to, $subject, $html, $headers );
 
-    if ( is_wp_error( $response ) ) {
-        error_log( 'Resend API error: ' . $response->get_error_message() );
-        return false;
+    if ( ! $sent ) {
+        error_log( 'FRS Mortgage Calculator: Failed to send email to ' . $to );
     }
 
-    $response_code = wp_remote_retrieve_response_code( $response );
-    if ( $response_code !== 200 ) {
-        error_log( 'Resend API error: ' . wp_remote_retrieve_body( $response ) );
-        return false;
-    }
-
-    return true;
+    return $sent;
 }
 
 /**
