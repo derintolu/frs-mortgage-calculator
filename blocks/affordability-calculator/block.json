@@ -35,5 +35,6 @@
 		"html": false,
 		"align": ["wide", "full"]
 	},
+	"editorScript": "frs-mortgage-calculator-editor",
 	"render": "file:./render.php"
 }

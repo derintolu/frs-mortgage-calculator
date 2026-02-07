@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && wp-scripts build --config webpack.config.cjs",
+    "build:widget": "vite build",
+    "build:blocks": "wp-scripts build --config webpack.config.cjs",
+    "start": "wp-scripts start --config webpack.config.cjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -14,6 +17,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toggle": "^1.0.3",
+    "@wordpress/server-side-render": "^5.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.309.0",
@@ -27,6 +31,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^4.2.0",
+    "@wordpress/scripts": "^27.0.0",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",

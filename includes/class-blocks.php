@@ -70,9 +70,32 @@ class Blocks {
 	 * Register all calculator blocks.
 	 */
 	public function register_blocks(): void {
+		$this->register_editor_script();
+
 		foreach ( $this->block_types as $block_name => $block_config ) {
 			$this->register_block( $block_name, $block_config );
 		}
+	}
+
+	/**
+	 * Register the shared editor script for all calculator blocks.
+	 */
+	private function register_editor_script(): void {
+		$asset_file = FRS_MC_DIR . 'build/blocks/index.asset.php';
+
+		if ( ! file_exists( $asset_file ) ) {
+			return;
+		}
+
+		$asset = require $asset_file;
+
+		wp_register_script(
+			'frs-mortgage-calculator-editor',
+			FRS_MC_URL . 'build/blocks/index.js',
+			$asset['dependencies'],
+			$asset['version'],
+			true
+		);
 	}
 
 	/**

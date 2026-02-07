@@ -137,6 +137,8 @@ class Plugin {
 	 * @return string
 	 */
 	public function add_module_type( string $tag, string $handle, string $src ): string {
+		// Only the frontend widget needs type="module" (Vite ES module output).
+		// The editor script is a classic webpack bundle — must NOT be a module.
 		if ( 'frs-mortgage-calculator' !== $handle ) {
 			return $tag;
 		}
