@@ -47,7 +47,7 @@ export function FloatingSelect({
           <span
             className="flex-shrink-0 transition-all duration-200"
             style={{
-              color: shouldFloat ? brandColor : '#9ca3af'
+              color: shouldFloat ? brandColor : '#6b7280'
             }}
           >
             {icon}

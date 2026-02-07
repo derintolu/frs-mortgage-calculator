@@ -40,6 +40,7 @@ export function ButtonsCard({ onEmailMe, onShare, brandColor, results }: Buttons
             className="flex-1"
             size="lg"
             variant="outline"
+            style={{ borderColor: brandColor, color: brandColor }}
           >
             <Share2 className="h-4 w-4 mr-2" />
             Share Results

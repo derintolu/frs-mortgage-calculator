@@ -18,7 +18,7 @@ export function ToggleButton({ options, value, onChange, className = '' }: Toggl
           className={`px-3 py-1 text-sm font-semibold rounded-md transition-colors ${
             value === option
               ? 'bg-gradient-to-r from-[var(--brand-primary-blue)] to-[var(--brand-rich-teal)] text-white'
-              : 'text-gray-700 hover:bg-gray-50'
+              : 'text-foreground hover:bg-muted'
           }`}
         >
           {option}

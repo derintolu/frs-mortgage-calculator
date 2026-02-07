@@ -286,13 +286,13 @@ function EmailResultsModal({
       {submitSuccess ? (
         <div className="py-6">
           <div className="text-center">
-            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-              {mode === 'email-me' ? <Mail className="h-6 w-6 text-green-600" /> : <Share2 className="h-6 w-6 text-green-600" />}
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-50 mb-4">
+              {mode === 'email-me' ? <Mail className="h-6 w-6 text-green-700" /> : <Share2 className="h-6 w-6 text-green-700" />}
             </div>
-            <DialogTitle className="text-green-600 text-lg font-semibold mb-2">
+            <DialogTitle className="text-green-700 text-lg font-semibold mb-2">
               {mode === 'email-me' ? 'Results Sent!' : 'Results Shared!'}
             </DialogTitle>
-            <DialogDescription className="text-sm text-gray-600">
+            <DialogDescription className="text-sm text-muted-foreground">
               {mode === 'email-me'
                 ? 'Check your email for your calculator results.'
                 : 'The results have been sent to the recipient.'}
@@ -351,7 +351,8 @@ function EmailResultsModal({
                 id="wantsContact"
                 checked={leadData.wantsContact}
                 onChange={(e) => setLeadData({ ...leadData, wantsContact: e.target.checked })}
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="mt-1 h-4 w-4 rounded border-gray-300"
+                style={{ accentColor: brandColor }}
               />
               <label
                 htmlFor="wantsContact"
@@ -362,7 +363,7 @@ function EmailResultsModal({
             </div>
 
             {submitError && (
-              <div className="text-sm text-red-600 bg-red-50 p-3 rounded">
+              <div className="text-sm text-red-700 bg-red-50 p-3 rounded">
                 {submitError}
               </div>
             )}
@@ -557,7 +558,7 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
           >
             {/* Mobile: Dropdown selector */}
             <div className="frs-mc-mobile-nav mb-6 p-4 rounded-lg border-2" style={{ borderColor: gradientStart }}>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Calculator Type</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Calculator Type</label>
               <Select value={activeTab} onValueChange={setActiveTab}>
                 <SelectTrigger
                   className="w-full h-12 text-base font-medium border-2 rounded-lg"
@@ -661,7 +662,7 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
         )}
 
         {/* Disclaimer - At the very bottom, styled like the original */}
-        <div className="text-[10px] text-gray-400 leading-tight pt-4 border-t border-gray-200 mt-6">
+        <div className="text-xs text-gray-500 leading-tight pt-4 border-t border-gray-200 mt-6">
           <p>
             Results received from this calculator are designed for comparative purposes only, and accuracy is not guaranteed.
             This calculator is made available to you as an educational tool only and calculations are based on borrower-input information.
