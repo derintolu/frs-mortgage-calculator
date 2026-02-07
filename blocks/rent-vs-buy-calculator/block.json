@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "frs/rent-vs-buy-calculator",
+	"version": "1.1.0",
+	"title": "Rent vs Buy Calculator",
+	"category": "frs-calculators",
+	"icon": "calculator",
+	"description": "Compare the costs of renting versus buying a home over time.",
+	"keywords": ["rent", "buy", "calculator", "comparison", "mortgage"],
+	"textdomain": "frs-mortgage-calculator",
+	"attributes": {
+		"userId": {
+			"type": "number",
+			"default": 0
+		},
+		"showLeadForm": {
+			"type": "boolean",
+			"default": true
+		},
+		"gradientStart": {
+			"type": "string",
+			"default": "#2563eb"
+		},
+		"gradientEnd": {
+			"type": "string",
+			"default": "#2dd4da"
+		},
+		"webhookUrl": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"render": "file:./render.php"
+}

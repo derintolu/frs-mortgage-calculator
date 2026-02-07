@@ -23,20 +23,7 @@ import {
   RentVsBuyCalculator
 } from '../components/calculators';
 import { ButtonsCard } from './components/ButtonsCard';
-
-export interface WidgetConfig {
-  loanOfficerId?: number;
-  webhookUrl?: string;
-  showLeadForm?: boolean;
-  brandColor?: string;
-  logoUrl?: string;
-  // Realtor partner branding
-  gradientStart?: string;  // e.g., "#ff6b6b"
-  gradientEnd?: string;    // e.g., "#feca57"
-  borderColor?: string;    // Optional solid border color override
-  apiUrl?: string;         // REST API base URL for leads endpoint
-  nonce?: string;          // WP nonce for authentication
-}
+import type { CalculatorType, WidgetConfig } from './main';
 
 interface LoanOfficerData {
   id: number;
@@ -71,6 +58,38 @@ interface LeadFormData {
   recipientEmail?: string;
   wantsContact: boolean;
 }
+
+// Calculator type configuration
+const CALCULATOR_CONFIG: Record<Exclude<CalculatorType, 'all'>, { title: string; description: string }> = {
+  conventional: {
+    title: 'Payment Calculator',
+    description: 'Calculate your monthly mortgage payment breakdown',
+  },
+  affordability: {
+    title: 'Affordability Calculator',
+    description: 'Find out how much home you can afford',
+  },
+  buydown: {
+    title: 'Buydown Calculator',
+    description: 'Explore rate buydown options and savings',
+  },
+  dscr: {
+    title: 'DSCR Calculator',
+    description: 'Calculate debt service coverage ratio for investment properties',
+  },
+  refinance: {
+    title: 'Refinance Calculator',
+    description: 'Analyze potential savings from refinancing',
+  },
+  netproceeds: {
+    title: 'Net Proceeds Calculator',
+    description: 'Estimate your proceeds from selling your home',
+  },
+  rentvsbuy: {
+    title: 'Rent vs Buy Calculator',
+    description: 'Compare the costs of renting versus buying',
+  },
+};
 
 // Loan Officer Profile Component
 function LoanOfficerProfile({
@@ -370,16 +389,57 @@ function EmailResultsModal({
   );
 }
 
+// Single Calculator Component - renders just one calculator type
+function SingleCalculator({
+  type,
+  showButtons,
+  onEmailMe,
+  onShare,
+  brandColor,
+}: {
+  type: Exclude<CalculatorType, 'all'>;
+  showButtons: boolean;
+  onEmailMe: (results?: CalculatorResults) => void;
+  onShare: (results?: CalculatorResults) => void;
+  brandColor: string;
+}) {
+  const calculatorProps = {
+    showButtons,
+    onEmailMe,
+    onShare,
+    brandColor,
+    ButtonsComponent: ButtonsCard,
+  };
+
+  switch (type) {
+    case 'conventional':
+      return <ConventionalCalculator {...calculatorProps} />;
+    case 'affordability':
+      return <AffordabilityCalculator {...calculatorProps} />;
+    case 'buydown':
+      return <BuydownCalculator {...calculatorProps} />;
+    case 'dscr':
+      return <DSCRCalculator {...calculatorProps} />;
+    case 'refinance':
+      return <RefinanceCalculator {...calculatorProps} />;
+    case 'netproceeds':
+      return <NetProceedsCalculator {...calculatorProps} />;
+    case 'rentvsbuy':
+      return <RentVsBuyCalculator {...calculatorProps} />;
+    default:
+      return <ConventionalCalculator {...calculatorProps} />;
+  }
+}
+
 export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfig }) {
   const {
     loanOfficerId,
     webhookUrl,
     showLeadForm = true,
     brandColor = '#3b82f6',
-    logoUrl,
     gradientStart = '#2563eb',
     gradientEnd = '#2dd4da',
-    borderColor
+    calculatorType = 'all',
   } = config;
 
   const [activeTab, setActiveTab] = useState('conventional');
@@ -417,6 +477,11 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
     setEmailModalOpen(true);
   };
 
+  // Determine if we should show a single calculator or all with tabs
+  const isSingleCalculator = calculatorType !== 'all';
+  const currentCalcType = isSingleCalculator ? calculatorType : activeTab;
+  const calcConfig = isSingleCalculator ? CALCULATOR_CONFIG[calculatorType as Exclude<CalculatorType, 'all'>] : null;
+
   return (
     <div
       className="calc-widget w-full max-w-7xl mx-auto p-6 font-sans"
@@ -451,11 +516,6 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
           outline: none !important;
         }
       `}</style>
-      {logoUrl && (
-        <div className="mb-6 text-center">
-          <img src={logoUrl} alt="Logo" className="h-12 mx-auto" />
-        </div>
-      )}
 
       {/* Calculator Section - Full Width */}
       <div className="w-full">
@@ -466,123 +526,139 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
           >
             <Calculator className="h-6 w-6 text-white" />
           </div>
-          <h2 className="text-2xl font-bold">Mortgage Calculator</h2>
+          <h2 className="text-2xl font-bold">
+            {isSingleCalculator && calcConfig ? calcConfig.title : 'Mortgage Calculator'}
+          </h2>
         </div>
 
         <p className="text-muted-foreground mt-2 mb-6">
-          Calculate payments for different mortgage types
+          {isSingleCalculator && calcConfig
+            ? calcConfig.description
+            : 'Calculate payments for different mortgage types'}
         </p>
 
-        <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="w-full"
-          gradientStart={gradientStart}
-          gradientEnd={gradientEnd}
-        >
-          {/* Mobile: Dropdown selector */}
-          <div className="frs-mc-mobile-nav mb-6 p-4 rounded-lg border-2" style={{ borderColor: gradientStart }}>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Calculator Type</label>
-            <Select value={activeTab} onValueChange={setActiveTab}>
-              <SelectTrigger
-                className="w-full h-12 text-base font-medium border-2 rounded-lg"
-                style={{ borderColor: gradientStart }}
-              >
-                <SelectValue placeholder="Select calculator type" />
-              </SelectTrigger>
-              <SelectContent className="rounded-lg border-2 shadow-lg">
-                <SelectItem value="conventional" className="py-3 text-base">Payment Calculator</SelectItem>
-                <SelectItem value="affordability" className="py-3 text-base">Affordability Calculator</SelectItem>
-                <SelectItem value="buydown" className="py-3 text-base">Buydown Calculator</SelectItem>
-                <SelectItem value="dscr" className="py-3 text-base">DSCR Calculator</SelectItem>
-                <SelectItem value="refinance" className="py-3 text-base">Refinance Calculator</SelectItem>
-                <SelectItem value="netproceeds" className="py-3 text-base">Net Proceeds Calculator</SelectItem>
-                <SelectItem value="rentvsbuy" className="py-3 text-base">Rent vs Buy Calculator</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        {/* Single Calculator Mode */}
+        {isSingleCalculator ? (
+          <SingleCalculator
+            type={calculatorType as Exclude<CalculatorType, 'all'>}
+            showButtons={showLeadForm}
+            onEmailMe={handleEmailMe}
+            onShare={handleShare}
+            brandColor={gradientStart}
+          />
+        ) : (
+          /* Multi-Calculator Mode with Tabs */
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+            gradientStart={gradientStart}
+            gradientEnd={gradientEnd}
+          >
+            {/* Mobile: Dropdown selector */}
+            <div className="frs-mc-mobile-nav mb-6 p-4 rounded-lg border-2" style={{ borderColor: gradientStart }}>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Calculator Type</label>
+              <Select value={activeTab} onValueChange={setActiveTab}>
+                <SelectTrigger
+                  className="w-full h-12 text-base font-medium border-2 rounded-lg"
+                  style={{ borderColor: gradientStart }}
+                >
+                  <SelectValue placeholder="Select calculator type" />
+                </SelectTrigger>
+                <SelectContent className="rounded-lg border-2 shadow-lg">
+                  <SelectItem value="conventional" className="py-3 text-base">Payment Calculator</SelectItem>
+                  <SelectItem value="affordability" className="py-3 text-base">Affordability Calculator</SelectItem>
+                  <SelectItem value="buydown" className="py-3 text-base">Buydown Calculator</SelectItem>
+                  <SelectItem value="dscr" className="py-3 text-base">DSCR Calculator</SelectItem>
+                  <SelectItem value="refinance" className="py-3 text-base">Refinance Calculator</SelectItem>
+                  <SelectItem value="netproceeds" className="py-3 text-base">Net Proceeds Calculator</SelectItem>
+                  <SelectItem value="rentvsbuy" className="py-3 text-base">Rent vs Buy Calculator</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          {/* Desktop: Tabs */}
-          <TabsList className="frs-mc-desktop-nav grid grid-cols-4 lg:grid-cols-7 mb-6 gap-1 w-full">
-            <TabsTrigger value="conventional">Payment</TabsTrigger>
-            <TabsTrigger value="affordability">Affordability</TabsTrigger>
-            <TabsTrigger value="buydown">Buydown</TabsTrigger>
-            <TabsTrigger value="dscr">DSCR</TabsTrigger>
-            <TabsTrigger value="refinance">Refinance</TabsTrigger>
-            <TabsTrigger value="netproceeds">Net Proceeds</TabsTrigger>
-            <TabsTrigger value="rentvsbuy">Rent vs Buy</TabsTrigger>
-          </TabsList>
+            {/* Desktop: Tabs */}
+            <TabsList className="frs-mc-desktop-nav grid grid-cols-4 lg:grid-cols-7 mb-6 gap-1 w-full">
+              <TabsTrigger value="conventional">Payment</TabsTrigger>
+              <TabsTrigger value="affordability">Affordability</TabsTrigger>
+              <TabsTrigger value="buydown">Buydown</TabsTrigger>
+              <TabsTrigger value="dscr">DSCR</TabsTrigger>
+              <TabsTrigger value="refinance">Refinance</TabsTrigger>
+              <TabsTrigger value="netproceeds">Net Proceeds</TabsTrigger>
+              <TabsTrigger value="rentvsbuy">Rent vs Buy</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="conventional">
-            <ConventionalCalculator
-              showButtons={showLeadForm}
-              onEmailMe={handleEmailMe}
-              onShare={handleShare}
-              brandColor={gradientStart}
-              ButtonsComponent={ButtonsCard}
-            />
-          </TabsContent>
+            <TabsContent value="conventional">
+              <ConventionalCalculator
+                showButtons={showLeadForm}
+                onEmailMe={handleEmailMe}
+                onShare={handleShare}
+                brandColor={gradientStart}
+                ButtonsComponent={ButtonsCard}
+              />
+            </TabsContent>
 
-          <TabsContent value="affordability">
-            <AffordabilityCalculator
-              showButtons={showLeadForm}
-              onEmailMe={handleEmailMe}
-              onShare={handleShare}
-              brandColor={gradientStart}
-              ButtonsComponent={ButtonsCard}
-            />
-          </TabsContent>
+            <TabsContent value="affordability">
+              <AffordabilityCalculator
+                showButtons={showLeadForm}
+                onEmailMe={handleEmailMe}
+                onShare={handleShare}
+                brandColor={gradientStart}
+                ButtonsComponent={ButtonsCard}
+              />
+            </TabsContent>
 
-          <TabsContent value="buydown">
-            <BuydownCalculator
-              showButtons={showLeadForm}
-              onEmailMe={handleEmailMe}
-              onShare={handleShare}
-              brandColor={gradientStart}
-              ButtonsComponent={ButtonsCard}
-            />
-          </TabsContent>
+            <TabsContent value="buydown">
+              <BuydownCalculator
+                showButtons={showLeadForm}
+                onEmailMe={handleEmailMe}
+                onShare={handleShare}
+                brandColor={gradientStart}
+                ButtonsComponent={ButtonsCard}
+              />
+            </TabsContent>
 
-          <TabsContent value="dscr">
-            <DSCRCalculator
-              showButtons={showLeadForm}
-              onEmailMe={handleEmailMe}
-              onShare={handleShare}
-              brandColor={gradientStart}
-              ButtonsComponent={ButtonsCard}
-            />
-          </TabsContent>
+            <TabsContent value="dscr">
+              <DSCRCalculator
+                showButtons={showLeadForm}
+                onEmailMe={handleEmailMe}
+                onShare={handleShare}
+                brandColor={gradientStart}
+                ButtonsComponent={ButtonsCard}
+              />
+            </TabsContent>
 
-          <TabsContent value="refinance">
-            <RefinanceCalculator
-              showButtons={showLeadForm}
-              onEmailMe={handleEmailMe}
-              onShare={handleShare}
-              brandColor={gradientStart}
-              ButtonsComponent={ButtonsCard}
-            />
-          </TabsContent>
+            <TabsContent value="refinance">
+              <RefinanceCalculator
+                showButtons={showLeadForm}
+                onEmailMe={handleEmailMe}
+                onShare={handleShare}
+                brandColor={gradientStart}
+                ButtonsComponent={ButtonsCard}
+              />
+            </TabsContent>
 
-          <TabsContent value="netproceeds">
-            <NetProceedsCalculator
-              showButtons={showLeadForm}
-              onEmailMe={handleEmailMe}
-              onShare={handleShare}
-              brandColor={gradientStart}
-              ButtonsComponent={ButtonsCard}
-            />
-          </TabsContent>
+            <TabsContent value="netproceeds">
+              <NetProceedsCalculator
+                showButtons={showLeadForm}
+                onEmailMe={handleEmailMe}
+                onShare={handleShare}
+                brandColor={gradientStart}
+                ButtonsComponent={ButtonsCard}
+              />
+            </TabsContent>
 
-          <TabsContent value="rentvsbuy">
-            <RentVsBuyCalculator
-              showButtons={showLeadForm}
-              onEmailMe={handleEmailMe}
-              onShare={handleShare}
-              brandColor={gradientStart}
-              ButtonsComponent={ButtonsCard}
-            />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="rentvsbuy">
+              <RentVsBuyCalculator
+                showButtons={showLeadForm}
+                onEmailMe={handleEmailMe}
+                onShare={handleShare}
+                brandColor={gradientStart}
+                ButtonsComponent={ButtonsCard}
+              />
+            </TabsContent>
+          </Tabs>
+        )}
 
         {/* Disclaimer - At the very bottom, styled like the original */}
         <div className="text-[10px] text-gray-400 leading-tight pt-4 border-t border-gray-200 mt-6">
@@ -609,7 +685,7 @@ export function MortgageCalculatorWidget({ config = {} }: { config?: WidgetConfi
           webhookUrl={webhookUrl}
           brandColor={brandColor}
           loanOfficer={loanOfficer || undefined}
-          calculatorType={activeTab}
+          calculatorType={currentCalcType}
           results={currentResults || undefined}
           onOpenChange={setEmailModalOpen}
         />

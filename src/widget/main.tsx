@@ -3,8 +3,19 @@ import { createRoot, Root } from 'react-dom/client';
 import { MortgageCalculatorWidget } from './MortgageCalculatorWidget';
 import '../index.css';
 
+// Calculator type mapping
+export type CalculatorType =
+  | 'conventional'
+  | 'affordability'
+  | 'buydown'
+  | 'dscr'
+  | 'refinance'
+  | 'netproceeds'
+  | 'rentvsbuy'
+  | 'all'; // Shows all calculators with tabs
+
 // Type for widget config
-interface WidgetConfig {
+export interface WidgetConfig {
   loanOfficerId?: number;
   webhookUrl?: string;
   showLeadForm?: boolean;
@@ -18,18 +29,17 @@ interface WidgetConfig {
   gradientEnd?: string;
   apiUrl?: string;
   nonce?: string;
+  calculatorType?: CalculatorType;
 }
 
 // Store mounted roots for cleanup
 const mountedRoots: Map<Element, Root> = new Map();
 
 /**
- * Mount the calculator widget to a container
- * Can be called manually for dynamic embedding
+ * Parse data attributes from container element
  */
-function mountWidget(container: HTMLElement, config?: WidgetConfig): Root | null {
-  // Get config from data attributes if not provided
-  const finalConfig: WidgetConfig = config || {
+function parseDataAttributes(container: HTMLElement): WidgetConfig {
+  return {
     loanOfficerId: container.dataset.loanOfficerId ? parseInt(container.dataset.loanOfficerId) : undefined,
     webhookUrl: container.dataset.webhookUrl,
     showLeadForm: container.dataset.showLeadForm !== 'false',
@@ -43,7 +53,17 @@ function mountWidget(container: HTMLElement, config?: WidgetConfig): Root | null
     gradientEnd: container.dataset.gradientEnd,
     apiUrl: container.dataset.apiUrl,
     nonce: container.dataset.nonce,
+    calculatorType: (container.dataset.calculatorType as CalculatorType) || 'all',
   };
+}
+
+/**
+ * Mount the calculator widget to a container
+ * Can be called manually for dynamic embedding
+ */
+function mountWidget(container: HTMLElement, config?: WidgetConfig): Root | null {
+  // Get config from data attributes if not provided
+  const finalConfig: WidgetConfig = config || parseDataAttributes(container);
 
   try {
     // Unmount existing if present
@@ -80,7 +100,7 @@ function unmountWidget(container: HTMLElement): void {
  * Auto-initialize all widgets with id="frs-mc-root" or data-frs-mortgage-calculator
  */
 function autoInit(): void {
-  // Find by ID
+  // Find by ID (legacy support)
   const byId = document.getElementById('frs-mc-root');
   if (byId && !mountedRoots.has(byId)) {
     mountWidget(byId);
