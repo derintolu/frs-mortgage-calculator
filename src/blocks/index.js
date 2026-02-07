@@ -1,8 +1,9 @@
 /**
  * FRS Mortgage Calculator — Editor block registrations.
  *
- * Registers all 7 calculator blocks in the Gutenberg inserter with
- * shared InspectorControls for style/config and a ServerSideRender preview.
+ * Company lead-gen calculator blocks for the Gutenberg inserter.
+ * These are the public/company versions — no loan officer association.
+ * LO-attached versions are handled separately on profile pages.
  */
 
 import { registerBlockType } from '@wordpress/blocks';
@@ -12,20 +13,23 @@ import {
 	TextControl,
 	ToggleControl,
 	ColorPalette,
-	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
-import ServerSideRender from '@wordpress/server-side-render';
 import { __ } from '@wordpress/i18n';
 
 /**
- * All calculator blocks share the same attributes and editor UI.
- * Only the block name, title, description, and keywords differ.
+ * Block definitions — 7 individual calculators + 1 all-in-one tabbed.
  */
 const BLOCKS = [
 	{
+		name: 'frs/all-calculators',
+		title: __( 'All Calculators (Tabbed)', 'frs-mortgage-calculator' ),
+		description: __( 'Full tabbed mortgage calculator suite — all 7 calculators with tab navigation.', 'frs-mortgage-calculator' ),
+		keywords: [ 'mortgage', 'calculator', 'all', 'tabs', 'suite' ],
+	},
+	{
 		name: 'frs/payment-calculator',
 		title: __( 'Payment Calculator', 'frs-mortgage-calculator' ),
-		description: __( 'Monthly payment breakdown calculator showing principal, interest, taxes, and insurance.', 'frs-mortgage-calculator' ),
+		description: __( 'Monthly payment breakdown — principal, interest, taxes, and insurance.', 'frs-mortgage-calculator' ),
 		keywords: [ 'mortgage', 'payment', 'calculator', 'loan', 'monthly' ],
 	},
 	{
@@ -66,37 +70,86 @@ const BLOCKS = [
 	},
 ];
 
+/** Look up block metadata by name. */
+function getBlockMeta( name ) {
+	return BLOCKS.find( ( b ) => b.name === name ) || {};
+}
+
 /**
  * Shared edit component for all calculator blocks.
  */
 function CalculatorEdit( { name, attributes, setAttributes } ) {
 	const blockProps = useBlockProps();
-	const { userId, showLeadForm, gradientStart, gradientEnd, webhookUrl } = attributes;
+	const { showLeadForm, gradientStart, gradientEnd, webhookUrl } = attributes;
+	const meta = getBlockMeta( name );
+	const isAllCalc = name === 'frs/all-calculators';
+
+	const previewStyle = {
+		background: `linear-gradient(135deg, ${ gradientStart } 0%, ${ gradientEnd } 100%)`,
+		padding: '32px 24px',
+		borderRadius: '12px',
+		color: '#fff',
+		minHeight: isAllCalc ? '240px' : '200px',
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		gap: '12px',
+		textAlign: 'center',
+	};
+
+	const titleStyle = {
+		fontSize: isAllCalc ? '24px' : '20px',
+		fontWeight: '700',
+		margin: 0,
+		lineHeight: 1.3,
+	};
+
+	const descStyle = {
+		fontSize: '14px',
+		opacity: 0.85,
+		margin: 0,
+		maxWidth: '400px',
+	};
+
+	const badgeStyle = {
+		fontSize: '11px',
+		fontWeight: '600',
+		textTransform: 'uppercase',
+		letterSpacing: '0.05em',
+		background: 'rgba(255,255,255,0.2)',
+		padding: '4px 12px',
+		borderRadius: '100px',
+	};
+
+	const settingsStyle = {
+		display: 'flex',
+		gap: '16px',
+		flexWrap: 'wrap',
+		justifyContent: 'center',
+		marginTop: '8px',
+		fontSize: '12px',
+		opacity: 0.75,
+	};
 
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
-				<PanelBody title={ __( 'Calculator Settings', 'frs-mortgage-calculator' ) }>
-					<NumberControl
-						label={ __( 'Loan Officer User ID', 'frs-mortgage-calculator' ) }
-						help={ __( 'WordPress user ID. Leave 0 for current user or default.', 'frs-mortgage-calculator' ) }
-						value={ userId }
-						min={ 0 }
-						onChange={ ( val ) => setAttributes( { userId: parseInt( val, 10 ) || 0 } ) }
-					/>
+				<PanelBody title={ __( 'Lead Capture', 'frs-mortgage-calculator' ) }>
 					<ToggleControl
 						label={ __( 'Show Lead Capture Form', 'frs-mortgage-calculator' ) }
+						help={ __( 'Leads are sent to the ISA team.', 'frs-mortgage-calculator' ) }
 						checked={ showLeadForm }
 						onChange={ ( val ) => setAttributes( { showLeadForm: val } ) }
 					/>
 					<TextControl
 						label={ __( 'Webhook URL', 'frs-mortgage-calculator' ) }
-						help={ __( 'URL to receive lead submissions via POST.', 'frs-mortgage-calculator' ) }
+						help={ __( 'Optional. URL to receive lead submissions via POST.', 'frs-mortgage-calculator' ) }
 						value={ webhookUrl }
 						onChange={ ( val ) => setAttributes( { webhookUrl: val } ) }
 					/>
 				</PanelBody>
-				<PanelBody title={ __( 'Style', 'frs-mortgage-calculator' ) } initialOpen={ false }>
+				<PanelBody title={ __( 'Brand Colors', 'frs-mortgage-calculator' ) } initialOpen={ false }>
 					<p className="components-base-control__label">
 						{ __( 'Gradient Start', 'frs-mortgage-calculator' ) }
 					</p>
@@ -116,10 +169,17 @@ function CalculatorEdit( { name, attributes, setAttributes } ) {
 				</PanelBody>
 			</InspectorControls>
 
-			<ServerSideRender
-				block={ name }
-				attributes={ attributes }
-			/>
+			<div style={ previewStyle }>
+				<span style={ badgeStyle }>
+					{ isAllCalc ? 'FRS Calculator Suite' : 'FRS Calculator' }
+				</span>
+				<p style={ titleStyle }>{ meta.title }</p>
+				<p style={ descStyle }>{ meta.description }</p>
+				<div style={ settingsStyle }>
+					<span>{ showLeadForm ? '✓ Lead capture on' : '✗ Lead capture off' }</span>
+					{ isAllCalc && <span>7 calculators with tabs</span> }
+				</div>
+			</div>
 		</div>
 	);
 }

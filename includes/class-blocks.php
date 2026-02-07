@@ -57,6 +57,11 @@ class Blocks {
 			'description'     => 'Rent vs buy comparison calculator',
 			'calculator_type' => 'rentvsbuy',
 		],
+		'all-calculators'         => [
+			'title'           => 'All Calculators (Tabbed)',
+			'description'     => 'Full tabbed calculator suite',
+			'calculator_type' => 'all',
+		],
 	];
 
 	/**

@@ -1,0 +1,40 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "frs/all-calculators",
+	"version": "1.2.0",
+	"title": "All Calculators (Tabbed)",
+	"category": "frs-calculators",
+	"icon": "calculator",
+	"description": "Full tabbed mortgage calculator suite — payment, affordability, buydown, DSCR, refinance, net proceeds, and rent vs buy.",
+	"keywords": ["mortgage", "calculator", "all", "tabs", "suite"],
+	"textdomain": "frs-mortgage-calculator",
+	"attributes": {
+		"userId": {
+			"type": "number",
+			"default": 0
+		},
+		"showLeadForm": {
+			"type": "boolean",
+			"default": true
+		},
+		"gradientStart": {
+			"type": "string",
+			"default": "#2563eb"
+		},
+		"gradientEnd": {
+			"type": "string",
+			"default": "#2dd4da"
+		},
+		"webhookUrl": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": ["wide", "full"]
+	},
+	"editorScript": "frs-mortgage-calculator-editor",
+	"render": "file:./render.php"
+}
