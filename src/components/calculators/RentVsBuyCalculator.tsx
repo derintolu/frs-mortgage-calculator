@@ -281,63 +281,62 @@ export function RentVsBuyCalculator({
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-        color: '#ffffff'
+        background: 'var(--gradient-hero)',
       }}>
         <CardHeader className="bg-black/20">
           <CardTitle style={{ color: '#ffffff' }}>Comparison Results</CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
-          <div className="text-center pb-4 border-b border-white/20">
-            <p className="text-sm opacity-90 mb-1">After {yearsToCompare} years</p>
-            <p className={`text-4xl font-bold mb-2 ${buyIsBetter ? 'text-green-300' : 'text-blue-300'}`}>
+        <CardContent className="pt-6 space-y-4" style={{ color: 'var(--brand-dark-navy)' }}>
+          <div className="text-center pb-4 border-b border-black/10">
+            <p className="text-sm mb-1">After {yearsToCompare} years</p>
+            <p className={`text-4xl font-bold mb-2 ${buyIsBetter ? 'text-green-800' : 'text-blue-800'}`}>
               {buyIsBetter ? 'Buying' : 'Renting'}
             </p>
-            <p className="text-sm opacity-75">
+            <p className="text-sm">
               is better by {formatCurrency(Math.abs(netDifference))}
             </p>
           </div>
 
           {/* Monthly Costs */}
-          <div className="space-y-3 pb-4 border-b border-white/20">
+          <div className="space-y-3 pb-4 border-b border-black/10">
             <p className="text-sm font-semibold mb-2">Monthly Costs</p>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Buying (Month 1)</span>
+              <span>Buying (Month 1)</span>
               <span className="font-semibold">{formatCurrency(totalMonthlyBuyCost)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Renting (Month 1)</span>
+              <span>Renting (Month 1)</span>
               <span className="font-semibold">{formatCurrency(monthlyRent + renterInsurance / 12)}</span>
             </div>
-            <div className="flex justify-between text-sm pt-2 border-t border-white/10">
-              <span className="opacity-90">Difference</span>
-              <span className={`font-semibold ${totalMonthlyBuyCost > monthlyRent ? 'text-red-300' : 'text-green-300'}`}>
+            <div className="flex justify-between text-sm pt-2 border-t border-black/10">
+              <span>Difference</span>
+              <span className={`font-semibold ${totalMonthlyBuyCost > monthlyRent ? 'text-red-800' : 'text-green-800'}`}>
                 {formatCurrency(Math.abs(totalMonthlyBuyCost - monthlyRent))}
               </span>
             </div>
           </div>
 
           {/* Buying Position */}
-          <div className="space-y-2 pb-4 border-b border-white/20">
+          <div className="space-y-2 pb-4 border-b border-black/10">
             <div className="flex items-center gap-2 mb-2">
               <TrendingUp className="h-4 w-4" />
               <p className="text-sm font-semibold">Buying Position</p>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Home Value</span>
-              <span className="font-semibold text-green-300">{formatCurrency(currentHomeValue)}</span>
+              <span>Home Value</span>
+              <span className="font-semibold text-green-800">{formatCurrency(currentHomeValue)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Remaining Loan</span>
-              <span className="font-semibold text-red-300">-{formatCurrency(Math.max(remainingBalance, 0))}</span>
+              <span>Remaining Loan</span>
+              <span className="font-semibold text-red-800">-{formatCurrency(Math.max(remainingBalance, 0))}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Total Costs</span>
-              <span className="font-semibold text-red-300">-{formatCurrency(totalBuyCosts)}</span>
+              <span>Total Costs</span>
+              <span className="font-semibold text-red-800">-{formatCurrency(totalBuyCosts)}</span>
             </div>
-            <div className="flex justify-between text-sm font-bold pt-2 border-t border-white/10">
+            <div className="flex justify-between text-sm font-bold pt-2 border-t border-black/10">
               <span>Net Position</span>
-              <span className={buyNetPosition >= 0 ? 'text-green-300' : 'text-red-300'}>
+              <span className={buyNetPosition >= 0 ? 'text-green-800' : 'text-red-800'}>
                 {formatCurrency(buyNetPosition)}
               </span>
             </div>
@@ -350,23 +349,23 @@ export function RentVsBuyCalculator({
               <p className="text-sm font-semibold">Renting Position</p>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Invested Savings</span>
-              <span className="font-semibold text-green-300">{formatCurrency(investedSavings)}</span>
+              <span>Invested Savings</span>
+              <span className="font-semibold text-green-800">{formatCurrency(investedSavings)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Total Rent Paid</span>
-              <span className="font-semibold text-red-300">-{formatCurrency(totalRentCosts)}</span>
+              <span>Total Rent Paid</span>
+              <span className="font-semibold text-red-800">-{formatCurrency(totalRentCosts)}</span>
             </div>
-            <div className="flex justify-between text-sm font-bold pt-2 border-t border-white/10">
+            <div className="flex justify-between text-sm font-bold pt-2 border-t border-black/10">
               <span>Net Position</span>
-              <span className={rentNetPosition >= 0 ? 'text-green-300' : 'text-red-300'}>
+              <span className={rentNetPosition >= 0 ? 'text-green-800' : 'text-red-800'}>
                 {formatCurrency(rentNetPosition)}
               </span>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-white/20">
-            <p className="text-xs opacity-75 leading-relaxed">
+          <div className="pt-4 border-t border-black/10">
+            <p className="text-xs leading-relaxed">
               This comparison assumes the renter invests the down payment and any monthly savings. Results depend heavily on home appreciation, investment returns, and length of ownership. Consider lifestyle factors beyond financial calculations.
             </p>
           </div>

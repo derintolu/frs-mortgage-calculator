@@ -72,10 +72,10 @@ export function DSCRCalculator({
   };
 
   const getDSCRStatus = () => {
-    if (dscr >= 1.25) return { text: 'Excellent', color: 'text-green-300' };
-    if (dscr >= 1.0) return { text: 'Good', color: 'text-blue-300' };
-    if (dscr >= 0.8) return { text: 'Fair', color: 'text-yellow-300' };
-    return { text: 'Poor', color: 'text-red-300' };
+    if (dscr >= 1.25) return { text: 'Excellent', color: 'text-green-800' };
+    if (dscr >= 1.0) return { text: 'Good', color: 'text-blue-800' };
+    if (dscr >= 0.8) return { text: 'Fair', color: 'text-yellow-800' };
+    return { text: 'Poor', color: 'text-red-800' };
   };
 
   const dscrStatus = getDSCRStatus();
@@ -211,15 +211,14 @@ export function DSCRCalculator({
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-        color: '#ffffff'
+        background: 'var(--gradient-hero)',
       }}>
         <CardHeader className="bg-black/20">
           <CardTitle style={{ color: '#ffffff' }}>DSCR Analysis</CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
-          <div className="text-center pb-4 border-b border-white/20">
-            <p className="text-sm opacity-90 mb-1">Debt Service Coverage Ratio</p>
+        <CardContent className="pt-6 space-y-4" style={{ color: 'var(--brand-dark-navy)' }}>
+          <div className="text-center pb-4 border-b border-black/10">
+            <p className="text-sm mb-1">Debt Service Coverage Ratio</p>
             <p className="text-5xl font-bold mb-2">
               {dscr.toFixed(2)}x
             </p>
@@ -229,16 +228,16 @@ export function DSCRCalculator({
           </div>
 
           {/* DSCR Gauge */}
-          <div className="pb-4 border-b border-white/20">
-            <div className="flex justify-between text-xs mb-2 opacity-75">
+          <div className="pb-4 border-b border-black/10">
+            <div className="flex justify-between text-xs mb-2">
               <span>Poor</span>
               <span>Fair</span>
               <span>Good</span>
               <span>Excellent</span>
             </div>
-            <div className="w-full bg-white/20 rounded-full h-3 overflow-hidden">
+            <div className="w-full bg-black/10 rounded-full h-3 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-red-400 via-yellow-300 via-blue-300 to-green-300 h-full rounded-full transition-all relative"
+                className="bg-gradient-to-r from-red-600 via-yellow-500 via-blue-600 to-green-600 h-full rounded-full transition-all relative"
                 style={{ width: '100%' }}
               >
                 <div
@@ -250,7 +249,7 @@ export function DSCRCalculator({
                 />
               </div>
             </div>
-            <div className="flex justify-between text-xs mt-1 opacity-75">
+            <div className="flex justify-between text-xs mt-1">
               <span>0.5</span>
               <span>1.0</span>
               <span>1.5</span>
@@ -258,27 +257,27 @@ export function DSCRCalculator({
             </div>
           </div>
 
-          <div className="space-y-3 pb-4 border-b border-white/20">
+          <div className="space-y-3 pb-4 border-b border-black/10">
             <p className="text-sm font-semibold mb-2">Monthly Cash Flow</p>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Rental Income</span>
+              <span>Rental Income</span>
               <span className="font-semibold">{formatCurrency(monthlyRent)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Vacancy Loss</span>
-              <span className="font-semibold text-red-300">-{formatCurrency(monthlyRent * (vacancyRate / 100))}</span>
+              <span>Vacancy Loss</span>
+              <span className="font-semibold text-red-800">-{formatCurrency(monthlyRent * (vacancyRate / 100))}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Effective Income</span>
+              <span>Effective Income</span>
               <span className="font-semibold">{formatCurrency(effectiveMonthlyRent)}</span>
             </div>
-            <div className="flex justify-between text-sm pt-2 border-t border-white/10">
-              <span className="opacity-90">Total Expenses</span>
-              <span className="font-semibold text-red-300">-{formatCurrency(totalMonthlyExpenses)}</span>
+            <div className="flex justify-between text-sm pt-2 border-t border-black/10">
+              <span>Total Expenses</span>
+              <span className="font-semibold text-red-800">-{formatCurrency(totalMonthlyExpenses)}</span>
             </div>
-            <div className="flex justify-between text-sm font-bold pt-2 border-t border-white/10">
+            <div className="flex justify-between text-sm font-bold pt-2 border-t border-black/10">
               <span>Net Cash Flow</span>
-              <span className={annualCashFlow >= 0 ? 'text-green-300' : 'text-red-300'}>
+              <span className={annualCashFlow >= 0 ? 'text-green-800' : 'text-red-800'}>
                 {formatCurrency((effectiveMonthlyRent - totalMonthlyExpenses))}
               </span>
             </div>
@@ -291,23 +290,23 @@ export function DSCRCalculator({
               <p className="text-sm font-semibold">Return Metrics</p>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Cash-on-Cash Return</span>
+              <span>Cash-on-Cash Return</span>
               <span className="font-semibold">{formatPercent(cashOnCashReturn)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Cap Rate</span>
+              <span>Cap Rate</span>
               <span className="font-semibold">{formatPercent(capRate)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Annual Cash Flow</span>
-              <span className={`font-semibold ${annualCashFlow >= 0 ? 'text-green-300' : 'text-red-300'}`}>
+              <span>Annual Cash Flow</span>
+              <span className={`font-semibold ${annualCashFlow >= 0 ? 'text-green-800' : 'text-red-800'}`}>
                 {formatCurrency(annualCashFlow)}
               </span>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-white/20">
-            <p className="text-xs opacity-75 leading-relaxed">
+          <div className="pt-4 border-t border-black/10">
+            <p className="text-xs leading-relaxed">
               DSCR (Debt Service Coverage Ratio) measures the property&apos;s ability to cover debt payments with rental income. Lenders typically require a minimum DSCR of 1.0-1.25 for investment property loans.
             </p>
           </div>

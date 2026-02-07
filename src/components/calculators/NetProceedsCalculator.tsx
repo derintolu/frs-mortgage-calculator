@@ -148,25 +148,24 @@ export function NetProceedsCalculator({
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-        color: '#ffffff'
+        background: 'var(--gradient-hero)',
       }}>
         <CardHeader className="bg-black/20">
           <CardTitle style={{ color: '#ffffff' }}>Net Proceeds</CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
-          <div className="text-center pb-4 border-b border-white/20">
-            <p className="text-sm opacity-90 mb-1">Estimated Net Proceeds</p>
+        <CardContent className="pt-6 space-y-4" style={{ color: 'var(--brand-dark-navy)' }}>
+          <div className="text-center pb-4 border-b border-black/10">
+            <p className="text-sm mb-1">Estimated Net Proceeds</p>
             <p className="text-4xl font-bold mb-1">
               {formatCurrency(netProceeds)}
             </p>
-            <p className="text-sm opacity-75">
+            <p className="text-sm">
               {formatPercent(proceedsPercent)} of sale price
             </p>
           </div>
 
           {/* Cost Breakdown */}
-          <div className="space-y-3 pb-4 border-b border-white/20">
+          <div className="space-y-3 pb-4 border-b border-black/10">
             <div className="flex items-center gap-2 mb-2">
               <DollarSign className="h-4 w-4" />
               <p className="text-sm font-semibold">Cost Breakdown</p>
@@ -177,17 +176,17 @@ export function NetProceedsCalculator({
                 <span>Sale Price</span>
                 <span className="font-semibold">{formatCurrency(salePrice)}</span>
               </div>
-              <div className="w-full bg-green-400 rounded-full h-2" />
+              <div className="w-full bg-green-600 rounded-full h-2" />
             </div>
 
             <div>
               <div className="flex justify-between text-xs mb-1">
                 <span>Mortgage Payoff ({formatPercent(mortgagePercent)})</span>
-                <span className="font-semibold text-red-300">-{formatCurrency(mortgageBalance)}</span>
+                <span className="font-semibold text-red-800">-{formatCurrency(mortgageBalance)}</span>
               </div>
-              <div className="w-full bg-white/20 rounded-full h-2">
+              <div className="w-full bg-black/10 rounded-full h-2">
                 <div
-                  className="bg-red-400 h-full rounded-full"
+                  className="bg-red-600 h-full rounded-full"
                   style={{ width: `${mortgagePercent}%` }}
                 />
               </div>
@@ -196,11 +195,11 @@ export function NetProceedsCalculator({
             <div>
               <div className="flex justify-between text-xs mb-1">
                 <span>Agent Commission ({formatPercent(commissionPercent)})</span>
-                <span className="font-semibold text-red-300">-{formatCurrency(commissionAmount)}</span>
+                <span className="font-semibold text-red-800">-{formatCurrency(commissionAmount)}</span>
               </div>
-              <div className="w-full bg-white/20 rounded-full h-2">
+              <div className="w-full bg-black/10 rounded-full h-2">
                 <div
-                  className="bg-orange-400 h-full rounded-full"
+                  className="bg-orange-600 h-full rounded-full"
                   style={{ width: `${commissionPercent}%` }}
                 />
               </div>
@@ -209,11 +208,11 @@ export function NetProceedsCalculator({
             <div>
               <div className="flex justify-between text-xs mb-1">
                 <span>Closing Costs ({formatPercent(closingPercent)})</span>
-                <span className="font-semibold text-red-300">-{formatCurrency(closingCostsAmount)}</span>
+                <span className="font-semibold text-red-800">-{formatCurrency(closingCostsAmount)}</span>
               </div>
-              <div className="w-full bg-white/20 rounded-full h-2">
+              <div className="w-full bg-black/10 rounded-full h-2">
                 <div
-                  className="bg-yellow-400 h-full rounded-full"
+                  className="bg-yellow-600 h-full rounded-full"
                   style={{ width: `${closingPercent}%` }}
                 />
               </div>
@@ -222,11 +221,11 @@ export function NetProceedsCalculator({
             <div>
               <div className="flex justify-between text-xs mb-1">
                 <span>Other Costs ({formatPercent(otherPercent)})</span>
-                <span className="font-semibold text-red-300">-{formatCurrency(homeWarranty + repairs + propertytax)}</span>
+                <span className="font-semibold text-red-800">-{formatCurrency(homeWarranty + repairs + propertytax)}</span>
               </div>
-              <div className="w-full bg-white/20 rounded-full h-2">
+              <div className="w-full bg-black/10 rounded-full h-2">
                 <div
-                  className="bg-blue-400 h-full rounded-full"
+                  className="bg-blue-600 h-full rounded-full"
                   style={{ width: `${otherPercent}%` }}
                 />
               </div>
@@ -237,39 +236,39 @@ export function NetProceedsCalculator({
           <div className="space-y-2">
             <p className="text-sm font-semibold mb-2">Itemized Costs</p>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Mortgage Balance</span>
+              <span>Mortgage Balance</span>
               <span className="font-semibold">{formatCurrency(mortgageBalance)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Agent Commission</span>
+              <span>Agent Commission</span>
               <span className="font-semibold">{formatCurrency(commissionAmount)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Closing Costs</span>
+              <span>Closing Costs</span>
               <span className="font-semibold">{formatCurrency(closingCostsAmount)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Home Warranty</span>
+              <span>Home Warranty</span>
               <span className="font-semibold">{formatCurrency(homeWarranty)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Repairs/Concessions</span>
+              <span>Repairs/Concessions</span>
               <span className="font-semibold">{formatCurrency(repairs)}</span>
             </div>
             {propertytax > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="opacity-90">Property Tax</span>
+                <span>Property Tax</span>
                 <span className="font-semibold">{formatCurrency(propertytax)}</span>
               </div>
             )}
-            <div className="flex justify-between text-sm font-bold pt-2 border-t border-white/10">
+            <div className="flex justify-between text-sm font-bold pt-2 border-t border-black/10">
               <span>Total Costs</span>
-              <span className="text-red-300">{formatCurrency(totalCosts)}</span>
+              <span className="text-red-800">{formatCurrency(totalCosts)}</span>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-white/20">
-            <p className="text-xs opacity-75 leading-relaxed">
+          <div className="pt-4 border-t border-black/10">
+            <p className="text-xs leading-relaxed">
               This estimate includes typical selling costs. Actual costs may vary based on your specific situation, local customs, and negotiations. Consult with a real estate professional for precise figures.
             </p>
           </div>

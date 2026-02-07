@@ -55,14 +55,13 @@ export function ResultsCard({ results }: { results: CalculationResults }) {
 
   return (
     <Card className="h-full" style={{
-      background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, #0f766e 100%)',
-      color: '#ffffff'
+      background: 'var(--gradient-hero)',
     }}>
       <CardHeader className="bg-black/20">
         <CardTitle style={{ color: '#ffffff' }}>Payment Summary</CardTitle>
       </CardHeader>
-      <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
-        <div className="text-center pb-4 border-b border-white/20">
+      <CardContent className="pt-6 space-y-4" style={{ color: 'var(--brand-dark-navy)' }}>
+        <div className="text-center pb-4 border-b border-black/10">
           <p className="text-sm mb-1">Monthly Payment</p>
           <p className="text-4xl font-bold">
             {formatCurrencyWithCents(results.monthlyPayment)}
@@ -70,22 +69,22 @@ export function ResultsCard({ results }: { results: CalculationResults }) {
         </div>
 
         {/* Donut Chart - Always show, empty state with outline */}
-        <div className="flex justify-center pb-4 border-b border-white/20">
+        <div className="flex justify-center pb-4 border-b border-black/10">
           <div className="w-48 h-48 relative">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={hasData ? chartData : [{ name: 'Empty', value: 1, color: 'rgba(255, 255, 255, 0.15)' }]}
+                  data={hasData ? chartData : [{ name: 'Empty', value: 1, color: 'rgba(0, 0, 0, 0.1)' }]}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
                   outerRadius={90}
                   paddingAngle={hasData ? 2 : 0}
                   dataKey="value"
-                  stroke="rgba(255, 255, 255, 0.3)"
+                  stroke="rgba(0, 0, 0, 0.15)"
                   strokeWidth={hasData ? 0 : 1}
                 >
-                  {(hasData ? chartData : [{ name: 'Empty', value: 1, color: 'rgba(255, 255, 255, 0.15)' }]).map((entry, index) => (
+                  {(hasData ? chartData : [{ name: 'Empty', value: 1, color: 'rgba(0, 0, 0, 0.1)' }]).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
@@ -129,7 +128,7 @@ export function ResultsCard({ results }: { results: CalculationResults }) {
           )}
         </div>
 
-        <div className="pt-4 border-t border-white/20 space-y-2">
+        <div className="pt-4 border-t border-black/10 space-y-2">
           <div className="flex justify-between text-sm">
             <span>Loan Amount</span>
             <span className="font-semibold">{formatCurrency(results.loanAmount || 0)}</span>
@@ -150,12 +149,10 @@ export function ResultsCard({ results }: { results: CalculationResults }) {
             <span>Principal</span>
             <span>Interest</span>
           </div>
-          <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-black/10 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-white h-full rounded-full transition-all"
-              style={{
-                width: `${results.totalPayment > 0 ? ((results.loanAmount || 0) / results.totalPayment) * 100 : 0}%`
-              }}
+              className="h-full rounded-full transition-all"
+              style={{ backgroundColor: 'var(--brand-dark-navy)', width: `${results.totalPayment > 0 ? ((results.loanAmount || 0) / results.totalPayment) * 100 : 0}%` }}
             />
           </div>
           <div className="flex justify-between text-xs">
@@ -172,14 +169,13 @@ export function ResultsCard({ results }: { results: CalculationResults }) {
 export function RefinanceResultsCard({ results }: { results: ReturnType<typeof calculateRefinance> }) {
   return (
     <Card className="h-fit" style={{
-      background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, #0f766e 100%)',
-      color: '#ffffff'
+      background: 'var(--gradient-hero)',
     }}>
       <CardHeader className="bg-black/20">
         <CardTitle style={{ color: '#ffffff' }}>Refinance Summary</CardTitle>
       </CardHeader>
-      <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
-        <div className="text-center pb-4 border-b border-white/20">
+      <CardContent className="pt-6 space-y-4" style={{ color: 'var(--brand-dark-navy)' }}>
+        <div className="text-center pb-4 border-b border-black/10">
           <p className="text-sm mb-1">New Monthly Payment</p>
           <p className="text-4xl font-bold">
             {formatCurrencyWithCents(results.monthlyPayment)}
@@ -189,7 +185,7 @@ export function RefinanceResultsCard({ results }: { results: ReturnType<typeof c
         <div className="space-y-3">
           <div className="flex justify-between text-sm">
             <span>Monthly Savings</span>
-            <span className="font-bold text-white">{formatCurrency(results.monthlySavings)}</span>
+            <span className="font-bold">{formatCurrency(results.monthlySavings)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span>Break-Even Point</span>
@@ -197,11 +193,11 @@ export function RefinanceResultsCard({ results }: { results: ReturnType<typeof c
           </div>
           <div className="flex justify-between text-sm">
             <span>Lifetime Savings</span>
-            <span className="font-bold text-white">{formatCurrency(results.lifetimeSavings)}</span>
+            <span className="font-bold">{formatCurrency(results.lifetimeSavings)}</span>
           </div>
         </div>
 
-        <div className="pt-4 border-t border-white/20 space-y-2">
+        <div className="pt-4 border-t border-black/10 space-y-2">
           <div className="flex justify-between text-sm">
             <span>Total Interest</span>
             <span className="font-semibold">{formatCurrency(results.totalInterest)}</span>
@@ -220,14 +216,13 @@ export function RefinanceResultsCard({ results }: { results: ReturnType<typeof c
 export function AffordabilityResultsCard({ results }: { results: ReturnType<typeof calculateAffordability> }) {
   return (
     <Card className="h-fit" style={{
-      background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, #0f766e 100%)',
-      color: '#ffffff'
+      background: 'var(--gradient-hero)',
     }}>
       <CardHeader className="bg-black/20">
         <CardTitle style={{ color: '#ffffff' }}>What You Can Afford</CardTitle>
       </CardHeader>
-      <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
-        <div className="text-center pb-4 border-b border-white/20">
+      <CardContent className="pt-6 space-y-4" style={{ color: 'var(--brand-dark-navy)' }}>
+        <div className="text-center pb-4 border-b border-black/10">
           <p className="text-sm mb-1">Maximum Home Price</p>
           <p className="text-4xl font-bold">
             {formatCurrency(results.maxHomePrice)}
@@ -245,7 +240,7 @@ export function AffordabilityResultsCard({ results }: { results: ReturnType<type
           </div>
         </div>
 
-        <div className="pt-4 border-t border-white/20 space-y-2">
+        <div className="pt-4 border-t border-black/10 space-y-2">
           <div className="flex justify-between text-sm">
             <span>Principal & Interest</span>
             <span className="font-semibold">{formatCurrency(results.principalAndInterest)}</span>

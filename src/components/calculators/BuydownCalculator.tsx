@@ -192,22 +192,21 @@ export function BuydownCalculator({
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%)',
-        color: '#ffffff'
+        background: 'var(--gradient-hero)',
       }}>
         <CardHeader className="bg-black/20">
           <CardTitle style={{ color: '#ffffff' }}>Buydown Summary</CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 space-y-4" style={{ color: '#ffffff' }}>
-          <div className="text-center pb-4 border-b border-white/20">
-            <p className="text-sm opacity-90 mb-1">Standard Payment</p>
+        <CardContent className="pt-6 space-y-4" style={{ color: 'var(--brand-dark-navy)' }}>
+          <div className="text-center pb-4 border-b border-black/10">
+            <p className="text-sm mb-1">Standard Payment</p>
             <p className="text-4xl font-bold">
               {formatCurrency(standardPayment)}
             </p>
           </div>
 
           {/* Payment Visualization Bars */}
-          <div className="space-y-3 pb-4 border-b border-white/20">
+          <div className="space-y-3 pb-4 border-b border-black/10">
             <p className="text-sm font-semibold mb-3">Payment Schedule</p>
 
             <div>
@@ -215,10 +214,9 @@ export function BuydownCalculator({
                 <span>Year 1</span>
                 <span className="font-semibold">{formatCurrency(buydownPayments.year1)}</span>
               </div>
-              <div className="w-full bg-white/20 rounded-full h-2">
+              <div className="w-full bg-black/10 rounded-full h-2">
                 <div
-                  className="bg-white h-full rounded-full"
-                  style={{ width: `${(buydownPayments.year1 / standardPayment) * 100}%` }}
+                  className="h-full rounded-full" style={{ backgroundColor: 'var(--brand-dark-navy)', width: `${(buydownPayments.year1 / standardPayment) * 100}%` }}
                 />
               </div>
             </div>
@@ -228,10 +226,9 @@ export function BuydownCalculator({
                 <span>Year 2</span>
                 <span className="font-semibold">{formatCurrency(buydownPayments.year2)}</span>
               </div>
-              <div className="w-full bg-white/20 rounded-full h-2">
+              <div className="w-full bg-black/10 rounded-full h-2">
                 <div
-                  className="bg-white h-full rounded-full"
-                  style={{ width: `${(buydownPayments.year2 / standardPayment) * 100}%` }}
+                  className="h-full rounded-full" style={{ backgroundColor: 'var(--brand-dark-navy)', width: `${(buydownPayments.year2 / standardPayment) * 100}%` }}
                 />
               </div>
             </div>
@@ -242,10 +239,9 @@ export function BuydownCalculator({
                   <span>Year 3</span>
                   <span className="font-semibold">{formatCurrency(buydownPayments.year3)}</span>
                 </div>
-                <div className="w-full bg-white/20 rounded-full h-2">
+                <div className="w-full bg-black/10 rounded-full h-2">
                   <div
-                    className="bg-white h-full rounded-full"
-                    style={{ width: `${(buydownPayments.year3 / standardPayment) * 100}%` }}
+                    className="h-full rounded-full" style={{ backgroundColor: 'var(--brand-dark-navy)', width: `${(buydownPayments.year3 / standardPayment) * 100}%` }}
                   />
                 </div>
               </div>
@@ -256,29 +252,29 @@ export function BuydownCalculator({
                 <span>Year {buydownType === '3-2-1' ? '4+' : '3+'}</span>
                 <span className="font-semibold">{formatCurrency(standardPayment)}</span>
               </div>
-              <div className="w-full bg-white/20 rounded-full h-2">
-                <div className="bg-white h-full rounded-full" style={{ width: '100%' }} />
+              <div className="w-full bg-black/10 rounded-full h-2">
+                <div className="h-full rounded-full" style={{ backgroundColor: 'var(--brand-dark-navy)', width: '100%' }} />
               </div>
             </div>
           </div>
 
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Loan Amount</span>
+              <span>Loan Amount</span>
               <span className="font-semibold">{formatCurrency(loanAmount)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Total Savings</span>
-              <span className="font-semibold text-green-300">{formatCurrency(buydownPayments.savings)}</span>
+              <span>Total Savings</span>
+              <span className="font-semibold text-green-800">{formatCurrency(buydownPayments.savings)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="opacity-90">Estimated Cost</span>
+              <span>Estimated Cost</span>
               <span className="font-semibold">{formatCurrency(estimatedCost)}</span>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-white/20">
-            <p className="text-xs opacity-75 leading-relaxed">
+          <div className="pt-4 border-t border-black/10">
+            <p className="text-xs leading-relaxed">
               A {buydownType} buydown temporarily reduces your interest rate and monthly payments. The seller or builder typically pays for this upfront cost to make the home more affordable in the early years.
             </p>
           </div>
