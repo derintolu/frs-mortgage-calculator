@@ -144,7 +144,7 @@ export function AffordabilityCalculator({
         )}
       </div>
 
-      <AffordabilityResultsCard results={results} />
+      <AffordabilityResultsCard results={results} brandColor={brandColor} />
     </div>
   );
 }

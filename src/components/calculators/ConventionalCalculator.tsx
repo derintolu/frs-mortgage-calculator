@@ -173,7 +173,7 @@ export function ConventionalCalculator({
         )}
       </div>
 
-      <ResultsCard results={results} />
+      <ResultsCard results={results} brandColor={brandColor} />
     </div>
   );
 }

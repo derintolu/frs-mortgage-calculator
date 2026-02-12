@@ -89,14 +89,6 @@
 
 }
 
-/* Chart Colors — must be on :root because ResultsCard reads them via getComputedStyle(document.documentElement) */
-:root {
-  --chart-1: #667eea;
-  --chart-2: #764ba2;
-  --chart-3: #f093fb;
-  --chart-4: #f5576c;
-  --chart-5: #fa709a;
-}
 
 /* WordPress theme override - ensure our buttons have correct colors */
 #frs-partnership-portal-root .bg-primary,

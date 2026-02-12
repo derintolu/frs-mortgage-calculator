@@ -9,21 +9,44 @@ import {
   type CalculationResults
 } from '../../utils/mortgageCalculations';
 
-// Results Card Component
-export function ResultsCard({ results }: { results: CalculationResults }) {
-  const hasData = results.monthlyPayment > 0;
+/**
+ * Convert a hex color to HSL components.
+ */
+function hexToHSL(hex: string): [number, number, number] {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else h = ((r - g) / d + 4) / 6;
+  }
+  return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+}
 
-  // Prepare data for pie chart — colors reference CSS custom properties
-  const chartColors = typeof window !== 'undefined' ? (() => {
-    const styles = getComputedStyle(document.documentElement);
-    return [
-      styles.getPropertyValue('--chart-1').trim() || '#667eea',
-      styles.getPropertyValue('--chart-2').trim() || '#764ba2',
-      styles.getPropertyValue('--chart-3').trim() || '#f093fb',
-      styles.getPropertyValue('--chart-4').trim() || '#f5576c',
-      styles.getPropertyValue('--chart-5').trim() || '#fa709a',
-    ];
-  })() : ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#fa709a'];
+/**
+ * Generate 5 distinct chart colors from a brand color by rotating hue and varying lightness.
+ */
+function generateChartColors(brandColor: string): string[] {
+  const [h, s, l] = hexToHSL(brandColor);
+  return [
+    `hsl(${h}, ${s}%, ${l}%)`,
+    `hsl(${(h + 45) % 360}, ${s}%, ${Math.min(l + 10, 80)}%)`,
+    `hsl(${(h + 90) % 360}, ${Math.max(s - 10, 30)}%, ${Math.min(l + 20, 85)}%)`,
+    `hsl(${(h + 160) % 360}, ${s}%, ${l}%)`,
+    `hsl(${(h + 220) % 360}, ${Math.max(s - 15, 25)}%, ${Math.min(l + 15, 80)}%)`,
+  ];
+}
+
+// Results Card Component
+export function ResultsCard({ results, brandColor = '#2563eb' }: { results: CalculationResults; brandColor?: string }) {
+  const hasData = results.monthlyPayment > 0;
+  const chartColors = generateChartColors(brandColor);
 
   const chartData = hasData ? [
     {
@@ -166,7 +189,7 @@ export function ResultsCard({ results }: { results: CalculationResults }) {
 }
 
 // Refinance Results Card
-export function RefinanceResultsCard({ results }: { results: ReturnType<typeof calculateRefinance> }) {
+export function RefinanceResultsCard({ results, brandColor = '#2563eb' }: { results: ReturnType<typeof calculateRefinance>; brandColor?: string }) {
   return (
     <Card className="h-fit" style={{
       background: 'var(--gradient-hero)',
@@ -213,7 +236,7 @@ export function RefinanceResultsCard({ results }: { results: ReturnType<typeof c
 }
 
 // Affordability Results Card
-export function AffordabilityResultsCard({ results }: { results: ReturnType<typeof calculateAffordability> }) {
+export function AffordabilityResultsCard({ results, brandColor = '#2563eb' }: { results: ReturnType<typeof calculateAffordability>; brandColor?: string }) {
   return (
     <Card className="h-fit" style={{
       background: 'var(--gradient-hero)',

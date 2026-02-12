@@ -139,7 +139,7 @@ export function RefinanceCalculator({
         )}
       </div>
 
-      <RefinanceResultsCard results={results} />
+      <RefinanceResultsCard results={results} brandColor={brandColor} />
     </div>
   );
 }
