@@ -87,7 +87,10 @@
   --gradient-forest: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
   --gradient-fire: linear-gradient(135deg, #f83600 0%, #f9d423 100%);
 
-  /* Chart Colors */
+}
+
+/* Chart Colors — must be on :root because ResultsCard reads them via getComputedStyle(document.documentElement) */
+:root {
   --chart-1: #667eea;
   --chart-2: #764ba2;
   --chart-3: #f093fb;
