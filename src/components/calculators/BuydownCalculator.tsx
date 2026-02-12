@@ -192,7 +192,7 @@ export function BuydownCalculator({
 
       {/* Results Card */}
       <Card className="h-fit" style={{
-        background: 'linear-gradient(135deg, var(--gradient-start, #2563eb) 0%, var(--gradient-end, #2dd4da) 100%)',
+        background: 'linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%)',
       }}>
         <CardHeader className="bg-black/20">
           <CardTitle style={{ color: '#ffffff' }}>Buydown Summary</CardTitle>

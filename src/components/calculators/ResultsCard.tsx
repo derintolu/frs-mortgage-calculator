@@ -78,7 +78,7 @@ export function ResultsCard({ results, brandColor = '#2563eb' }: { results: Calc
 
   return (
     <Card className="h-full" style={{
-      background: 'linear-gradient(135deg, var(--gradient-start, #2563eb) 0%, var(--gradient-end, #2dd4da) 100%)',
+      background: 'linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%)',
     }}>
       <CardHeader className="bg-black/20">
         <CardTitle style={{ color: '#ffffff' }}>Payment Summary</CardTitle>
@@ -192,7 +192,7 @@ export function ResultsCard({ results, brandColor = '#2563eb' }: { results: Calc
 export function RefinanceResultsCard({ results, brandColor = '#2563eb' }: { results: ReturnType<typeof calculateRefinance>; brandColor?: string }) {
   return (
     <Card className="h-fit" style={{
-      background: 'linear-gradient(135deg, var(--gradient-start, #2563eb) 0%, var(--gradient-end, #2dd4da) 100%)',
+      background: 'linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%)',
     }}>
       <CardHeader className="bg-black/20">
         <CardTitle style={{ color: '#ffffff' }}>Refinance Summary</CardTitle>
@@ -239,7 +239,7 @@ export function RefinanceResultsCard({ results, brandColor = '#2563eb' }: { resu
 export function AffordabilityResultsCard({ results, brandColor = '#2563eb' }: { results: ReturnType<typeof calculateAffordability>; brandColor?: string }) {
   return (
     <Card className="h-fit" style={{
-      background: 'linear-gradient(135deg, var(--gradient-start, #2563eb) 0%, var(--gradient-end, #2dd4da) 100%)',
+      background: 'linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%)',
     }}>
       <CardHeader className="bg-black/20">
         <CardTitle style={{ color: '#ffffff' }}>What You Can Afford</CardTitle>
