@@ -11,8 +11,11 @@
   }
 }
 
-/* Custom CSS variables for branding */
-:root {
+/* Custom CSS variables — scoped to calculator containers to prevent page leaks */
+.frs-mortgage-calculator-widget,
+#frs-mc-root,
+#frs-partnership-portal-root,
+#frs-portal-v3-root {
   /* Primary Brand Colors */
   --brand-dark-navy: #171A1F;
   --brand-medium-navy: #263042;
@@ -27,7 +30,7 @@
   --brand-off-white: #F8F7F9;
   --brand-page-background: #FAFAFA;
   --brand-pure-white: #FFFFFF;
-  
+
   /* Form and input specific */
   --brand-input-background: #FFFFFF;
 
@@ -77,6 +80,19 @@
   --sidebar-accent-foreground: 224 12% 11%;
   --sidebar-border: 209 38% 81%;
   --sidebar-ring: 217 91% 60%;
+
+  /* Extra gradients */
+  --gradient-sunset: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --gradient-ocean: linear-gradient(135deg, #2e3192 0%, #1bffff 100%);
+  --gradient-forest: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+  --gradient-fire: linear-gradient(135deg, #f83600 0%, #f9d423 100%);
+
+  /* Chart Colors */
+  --chart-1: #667eea;
+  --chart-2: #764ba2;
+  --chart-3: #f093fb;
+  --chart-4: #f5576c;
+  --chart-5: #fa709a;
 }
 
 /* WordPress theme override - ensure our buttons have correct colors */
@@ -90,35 +106,12 @@
   color: white !important;
 }
 
-/* Base styles */
-@layer base {
-  * {
-    border-color: var(--border);
-  }
-  body {
-    background-color: white;
-    color: var(--foreground);
-  }
-  :root {
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-  .dark {
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
+/* Base styles — scoped to calculator containers */
+.frs-mortgage-calculator-widget *,
+#frs-mc-root *,
+#frs-partnership-portal-root *,
+#frs-portal-v3-root * {
+  border-color: var(--border);
 }
 
 /* Force card backgrounds to use our custom color and add depth */
@@ -133,8 +126,9 @@
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Header container query setup */
-header {
+/* Header container query setup — scoped to portal */
+#frs-partnership-portal-root header,
+#frs-portal-v3-root header {
   container-type: inline-size;
   container-name: header;
 }
@@ -315,52 +309,13 @@ body.frs-portal-page main {
   margin-top: auto !important;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
+/* border-border and bg-background already scoped above */
 
 /* ============================================
    LOAN OFFICER PORTAL V2.6 STYLES
    ============================================ */
 
-/* Brand Colors */
-:root {
-  --brand-navy: #263042;
-  --brand-primary-blue: #2563eb;
-  --brand-rich-teal: #2dd4da;
-  --brand-light-blue: #c3d9f1;
-  --brand-off-white: #f8f7f9;
-}
-
-/* Brand Gradients */
-:root {
-  --gradient-primary: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-primary-blue) 25%, var(--brand-rich-teal) 75%, var(--brand-light-blue) 100%);
-  --gradient-hero: linear-gradient(135deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 100%);
-  --gradient-subtle: linear-gradient(180deg, var(--brand-off-white) 0%, var(--brand-light-blue) 100%);
-  --gradient-button-hover: linear-gradient(45deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 50%, var(--brand-primary-blue) 100%);
-  --gradient-brand-blue: linear-gradient(45deg, var(--brand-primary-blue) 0%, var(--brand-light-blue) 50%, var(--brand-primary-blue) 100%);
-  --gradient-brand-teal: linear-gradient(45deg, var(--brand-rich-teal) 0%, var(--brand-light-blue) 50%, var(--brand-rich-teal) 100%);
-  --gradient-brand-navy: linear-gradient(45deg, var(--brand-navy) 0%, var(--brand-primary-blue) 50%, var(--brand-navy) 100%);
-  --gradient-brand-accent: linear-gradient(45deg, var(--brand-primary-blue) 0%, var(--brand-rich-teal) 25%, var(--brand-light-blue) 50%, var(--brand-rich-teal) 75%, var(--brand-primary-blue) 100%);
-  --gradient-sunset: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-  --gradient-ocean: linear-gradient(135deg, #2e3192 0%, #1bffff 100%);
-  --gradient-forest: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
-  --gradient-fire: linear-gradient(135deg, #f83600 0%, #f9d423 100%);
-}
-
-/* Chart Colors */
-:root {
-  --chart-1: #667eea;
-  --chart-2: #764ba2;
-  --chart-3: #f093fb;
-  --chart-4: #f5576c;
-  --chart-5: #fa709a;
-}
+/* Brand Colors, Gradients, Chart Colors — already defined in scoped block above */
 
 /* Brand Hover Effects */
 .brand-hover {
