@@ -86,6 +86,15 @@ export function BuydownCalculator({
           savings: (standardPayment - year1Payment) * 12
         };
       }
+      default:
+        // buydownType can arrive from external/embedded state (URL params,
+        // serialized widget config) that bypasses the TS union at runtime.
+        return {
+          year1: standardPayment,
+          year2: standardPayment,
+          year3: standardPayment,
+          savings: 0
+        };
     }
   };
 
